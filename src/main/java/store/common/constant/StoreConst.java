@@ -3,6 +3,8 @@ package store.common.constant;
 public class StoreConst {
 
     public static final String ERROR_PREFIX = "[ERROR] ";
+    public static final int PRODUCT_COLUMN_SIZE = 4;
+    public static final int PROMOTION_COLUMN_SIZE = 5;
 
     public static final String PROMOTIONS_FILE_PATH = "src/main/resources/promotions.md";
     public static final String PRODUCTS_FILE_PATH = "src/main/resources/products.md";

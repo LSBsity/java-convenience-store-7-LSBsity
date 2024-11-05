@@ -39,17 +39,21 @@ public class PromotionMarkDownFileParser implements PromotionParser {
     private static Promotion parseLine(String line) {
         String[] fields = line.split(StoreConst.FILE_PARSE_DELIMETER);
 
-        String promotionName = fields[0];
-        int buy = Integer.parseInt(fields[1]);
-        int get = Integer.parseInt(fields[2]);
-        LocalDate startDate = LocalDate.parse(fields[3]);
-        LocalDate endDate = LocalDate.parse(fields[4]);
+        if (fields.length != StoreConst.PROMOTION_COLUMN_SIZE) {
+            throw new BusinessException(ErrorCode.FILE_PARSE_OR_PATH_ERROR);
+        }
 
-        PromotionType promotionType = determinePromotionType(buy, get);
-        return Promotion.of(promotionName, promotionType, startDate, endDate);
-    }
+        try {
+            String promotionName = fields[0];
+            int buy = Integer.parseInt(fields[1]);
+            int get = Integer.parseInt(fields[2]);
+            LocalDate startDate = LocalDate.parse(fields[3]);
+            LocalDate endDate = LocalDate.parse(fields[4]);
 
-    private static PromotionType determinePromotionType(int buy, int get) {
-        return PromotionType.getMatchedPromotionType(buy, get);
+            PromotionType promotionType = PromotionType.getMatchedPromotionType(buy, get);
+            return Promotion.of(promotionName, promotionType, startDate, endDate);
+        } catch (NumberFormatException e) {
+            throw new BusinessException(ErrorCode.FILE_PARSE_OR_PATH_ERROR);
+        }
     }
 }
