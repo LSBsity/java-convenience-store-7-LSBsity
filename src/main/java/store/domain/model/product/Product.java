@@ -23,6 +23,10 @@ public class Product {
         return new Product(name, price, quantity, promotion, isPromotedProduct);
     }
 
+    public static Product createCopyOfProduct(Product first) {
+        return new Product(first.name, first.price, 0, Promotion.createNone(), false);
+    }
+
     public String getName() {
         return name;
     }

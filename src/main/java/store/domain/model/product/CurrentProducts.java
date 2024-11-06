@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 public class CurrentProducts {
 
+    // Map<ProductName, List<Product>>
     private final Map<String, List<Product>> currentProducts;
 
     private CurrentProducts(Map<String, List<Product>> currentProducts) {
@@ -16,14 +17,31 @@ public class CurrentProducts {
     }
 
     public static CurrentProducts create(List<Product> productList) {
-        // 이름을 기준으로 Map으로 변환하고, 각 리스트는 프로모션이 있는 제품이 맨 앞에 오도록 정렬
+        // 이름 별 Grouping, 각 List<Product>는 프로모션이 있는 제품이 맨 앞에 오도록 정렬
         Map<String, List<Product>> productMap = productList.stream()
                 .collect(Collectors.groupingBy(
                         Product::getName,
                         LinkedHashMap::new,
                         Collectors.collectingAndThen(Collectors.toList(), productComparator())
                 ));
+
+        addDefaultProductIfOnlyPromotedExists(productMap);
+
         return new CurrentProducts(productMap);
+    }
+
+    /**
+     * Products.md에 프로모션 물품만 있고 프로모션 미적용 물품이 없다면 이름과 가격을 카피해서 ProductMap에 추가함
+     */
+    private static void addDefaultProductIfOnlyPromotedExists(Map<String, List<Product>> productMap) {
+        for (String productName : productMap.keySet()) {
+            List<Product> products = productMap.get(productName);
+            Product first = products.getFirst();
+            if (products.size() == 1 && first.isPromotedProduct()) {
+                Product emptyProduct = Product.createCopyOfProduct(first);
+                products.add(emptyProduct);
+            }
+        }
     }
 
     public List<Product> findProductByName(String name) {
