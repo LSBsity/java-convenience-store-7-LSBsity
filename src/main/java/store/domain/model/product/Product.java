@@ -1,8 +1,7 @@
 package store.domain.model.product;
 
+import store.common.constant.StoreConst;
 import store.domain.model.promotion.Promotion;
-
-import java.util.Objects;
 
 public class Product {
 
@@ -42,5 +41,25 @@ public class Product {
 
     public boolean isPromotedProduct() {
         return this.isPromotedProduct;
+    }
+
+    @Override
+    public String toString() {
+        String promotionMessage = StoreConst.EMPTY;
+        if (this.isPromotedProduct()) {
+            promotionMessage = this.getPromotion().getPromotionName();
+        }
+
+        String quantityMessage = this.getQuantity() + StoreConst.QUANTITY_UNIT;
+        if (this.getQuantity() == 0) {
+            quantityMessage = StoreConst.NOT_INSTOCK_MSG;
+        }
+
+        return String.format("-%s %,d원 %s %s",
+                this.name,
+                this.getPrice(),
+                quantityMessage,
+                promotionMessage
+        );
     }
 }
