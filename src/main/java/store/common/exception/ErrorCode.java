@@ -8,8 +8,13 @@ public enum ErrorCode {
     FILE_PARSE_OR_PATH_ERROR(StoreConst.FILE_PARSE_OR_PATH_ERROR_MSG),
 
     // product
-    PRODUCT_NOT_EXIST(StoreConst.PRODUCT_NOT_EXIST_MSG);
+    // user input
+    WISH_PRODUCT_NOT_EXIST_ERROR(StoreConst.WISH_PRODUCT_NOT_EXIST_ERROR_MSG),
+    WISH_PRODUCT_OUT_OF_STOCK_ERROR(StoreConst.WISH_PRODUCT_OUT_OF_STOCK_MSG),
+    WISH_PRODUCT_INPUT_ERROR(StoreConst.WISH_PRODUCT_INPUT_ERROR_MSG),
+    WISH_PRODUCT_INPUT_FORMAT_ERROR(StoreConst.WISH_PRODUCT_INPUT_FORAT_ERROR_MSG),
 
+    ;
     private final String message;
 
     ErrorCode(final String message) {

@@ -46,7 +46,7 @@ public class CurrentProducts {
 
     public List<Product> findProductByName(String name) {
         if (isNotExistProduct(name)) {
-            throw new BusinessException(ErrorCode.PRODUCT_NOT_EXIST);
+            throw new BusinessException(ErrorCode.WISH_PRODUCT_NOT_EXIST_ERROR);
         }
         return this.currentProducts.get(name);
     }
@@ -55,7 +55,7 @@ public class CurrentProducts {
         return Collections.unmodifiableMap(this.currentProducts);
     }
 
-    private boolean isNotExistProduct(String name) {
+    public boolean isNotExistProduct(String name) {
         return this.currentProducts.containsKey(name) == false;
     }
 
