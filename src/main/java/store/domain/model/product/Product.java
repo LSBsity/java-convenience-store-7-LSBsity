@@ -35,8 +35,8 @@ public class Product {
         return price;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public int getCurrentQuantity() {
+        return this.quantity;
     }
 
     public Promotion getPromotion() {
@@ -47,6 +47,10 @@ public class Product {
         return this.isPromotedProduct;
     }
 
+    public int getPromotionDefaultQuantity() {
+        return this.promotion.getDefaultDefaultQuantity();
+    }
+
     @Override
     public String toString() {
         String promotionMessage = StoreConst.EMPTY;
@@ -54,8 +58,8 @@ public class Product {
             promotionMessage = this.getPromotion().getPromotionName();
         }
 
-        String quantityMessage = this.getQuantity() + StoreConst.QUANTITY_UNIT;
-        if (this.getQuantity() == 0) {
+        String quantityMessage = this.getCurrentQuantity() + StoreConst.QUANTITY_UNIT;
+        if (this.getCurrentQuantity() == 0) {
             quantityMessage = StoreConst.NOT_INSTOCK_MSG;
         }
 

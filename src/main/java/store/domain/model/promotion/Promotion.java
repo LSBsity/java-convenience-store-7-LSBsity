@@ -44,6 +44,10 @@ public class Promotion {
         return !currentDate.isBefore(startDate) && !currentDate.isAfter(endDate);
     }
 
+    public int getDefaultDefaultQuantity() {
+        return this.promotionType.getSize();
+    }
+
     public String getPromotionName() {
         return promotionName;
     }

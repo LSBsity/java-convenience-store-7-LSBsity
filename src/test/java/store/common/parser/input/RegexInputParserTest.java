@@ -145,10 +145,10 @@ class RegexInputParserTest {
 
             @ParameterizedTest
             @ValueSource(strings = {
-                    "[콜라-11],[사이다-8],[오렌지주스-9]",
+                    "[콜라-21],[사이다-8],[오렌지주스-9]",
                     "[콜라-2],[사이다-9],[오렌지주스-10]",
                     "[콜라-5],[사이다-3],[오렌지주스-10]",
-                    "[콜라-10],[사이다-10],[오렌지주스-10]",
+                    "[콜라-11],[사이다-10],[오렌지주스-10]",
             })
             @DisplayName("구매하려는 물건의 양이 부족할 시 WISH_PRODUCT_OUT_OF_STOCK_ERROR를 반환한다.")
             void throwBusinessException_outOfStock(String userInput) {

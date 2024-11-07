@@ -59,6 +59,13 @@ public class CurrentProducts {
         return this.currentProducts.containsKey(name) == false;
     }
 
+    public int getCurrentTotalStockQuantity(String name) {
+        return this.currentProducts.get(name)
+                .stream()
+                .mapToInt(Product::getCurrentQuantity)
+                .sum();
+    }
+
     private static Function<List<Product>, List<Product>> productComparator() {
         return list -> list.stream()
                 .sorted((p1, p2) -> Boolean.compare(p2.isPromotedProduct(), p1.isPromotedProduct()))

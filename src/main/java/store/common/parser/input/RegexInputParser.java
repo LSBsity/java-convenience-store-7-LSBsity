@@ -4,7 +4,6 @@ import store.common.constant.StoreConst;
 import store.common.exception.BusinessException;
 import store.common.exception.ErrorCode;
 import store.domain.model.product.CurrentProducts;
-import store.domain.model.product.Product;
 import store.common.parser.dto.UserWish;
 
 import java.util.ArrayList;
@@ -42,18 +41,19 @@ public class RegexInputParser implements InputParser {
     }
 
     private static void parseValidateLogics(CurrentProducts products, String requestProductName, int requestProductQuantity) {
-        List<Product> findProducts = validateProductExist(products, requestProductName); // 존재하는가
-        validateProductInstock(findProducts, requestProductQuantity);                    // 수량이 있는가
-    }
-    private static List<Product> validateProductExist(CurrentProducts products, String productName) {
-        return products.findProductByName(productName); // throw WISH_PRODUCT_NOT_EXIST_ERROR
+        validateProductExist(products, requestProductName);                           // 존재하는가
+        validateProductInstock(products, requestProductName, requestProductQuantity); // 수량이 있는가
     }
 
-    private static void validateProductInstock(List<Product> findProducts, int requestProductQuantity) {
-        findProducts.stream()
-                .filter(product -> product.getQuantity() >= requestProductQuantity)
-                .findFirst()
-                .orElseThrow(() -> new BusinessException(ErrorCode.WISH_PRODUCT_OUT_OF_STOCK_ERROR));
+    private static void validateProductExist(CurrentProducts products, String productName) {
+        products.findProductByName(productName); // throw WISH_PRODUCT_NOT_EXIST_ERROR
+    }
+
+    private static void validateProductInstock(CurrentProducts products, String requestProductName, int requestProductQuantity) {
+        int totalStockQuantity = products.getCurrentTotalStockQuantity(requestProductName);
+        if (totalStockQuantity < requestProductQuantity) {
+            throw new BusinessException(ErrorCode.WISH_PRODUCT_OUT_OF_STOCK_ERROR);
+        }
     }
 
 }
