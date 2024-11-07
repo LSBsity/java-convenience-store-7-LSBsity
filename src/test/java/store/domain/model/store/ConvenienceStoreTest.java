@@ -188,6 +188,75 @@ class ConvenienceStoreTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("계산서 발행 테스트")
+    class CheckTest {
+
+        @Nested
+        @DisplayName("check 메서드는")
+        class checkMethodTest {
+
+            @Nested
+            @DisplayName("프로모션 상품만 있을 시")
+            class IfAllPromotionProduct {
+                @Test
+                @DisplayName("멤버십 할인은 적용되지 않는다.")
+                void notApplyMembershipSale() {
+                    //given
+                    //when
+                    Invoice invoice = convenienceStore.check(confirmedWishLists, UserAnswer.YES);
+
+                    //then
+                    Assertions.assertThat(invoice.getMembershipDiscount()).isEqualTo(0);
+                }
+
+                @Test
+                @DisplayName("프로모션 할인이 적용되어야 한다.")
+                void applyPromotionSale() {
+                    //given
+                    //when
+                    Invoice invoice = convenienceStore.check(confirmedWishLists, UserAnswer.YES);
+
+                    //then
+                    Assertions.assertThat(invoice.getPromotionDiscount()).isEqualTo(5000);
+                    Assertions.assertThat(invoice.getTotalPrice()).isEqualTo(9000);
+                }
+
+                @Test
+                @DisplayName("프로모션 할인이 적용되어야 한다.2")
+                void applyPromotionSale2() {
+                    //given
+                    //when
+                    Invoice invoice = convenienceStore.check(confirmedWishLists3, UserAnswer.YES);
+
+                    //then
+                    OutputView outputView = new OutputView();
+                    outputView.showInvoice(invoice);
+                    Assertions.assertThat(invoice.getPromotionDiscount()).isEqualTo(2000);
+                    Assertions.assertThat(invoice.getMembershipDiscount()).isEqualTo(3840);
+                    Assertions.assertThat(invoice.getTotalPrice()).isEqualTo(21960);
+                }
+            }
+
+            @ParameterizedTest
+            @EnumSource(value = UserAnswer.class, names = {"YES", "NO"})
+            @DisplayName("유저가 멤버십 할인을 선택해야 멤버십 할인을 적용한다.")
+            public void membershipChoose(UserAnswer userAnswer) {
+                //given
+                //when
+                Invoice invoice = convenienceStore.check(confirmedWishLists2, userAnswer);
+
+                //then
+                if (userAnswer.equals(UserAnswer.YES)) {
+                    Assertions.assertThat(invoice.getMembershipDiscount()).isEqualTo(3840);
+                }
+                if (userAnswer.equals(UserAnswer.NO)) {
+                    Assertions.assertThat(invoice.getMembershipDiscount()).isEqualTo(0);
+                }
+            }
+        }
+    }
 }
 
 
