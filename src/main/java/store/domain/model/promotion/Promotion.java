@@ -4,7 +4,6 @@ import store.common.exception.BusinessException;
 import store.common.exception.ErrorCode;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 public class Promotion {
 
@@ -45,7 +44,7 @@ public class Promotion {
     }
 
     public int getDefaultDefaultQuantity() {
-        return this.promotionType.getSize();
+        return this.promotionType.getDefaultSize();
     }
 
     public String getPromotionName() {
