@@ -8,8 +8,14 @@ public class StoreConst {
     public static final int PRODUCT_COLUMN_SIZE = 4;
     public static final int PROMOTION_COLUMN_SIZE = 5;
 
+    public static final double MEMBERSHIP_DISCOUNT_RATE = 0.3;
+
     public static final String NOT_INSTOCK_MSG = "재고 없음";
     public static final String QUANTITY_UNIT = "개";
+
+    public static final String NO = "N";
+    public static final String YES = "Y";
+    public static final String ASK_MEMBERSHIP_SALE = "멤버십 할인을 받으시겠습니까? (Y/N)";
 
     public static final String WISH_LIST_INPUT_REGEX = "\\[(.+?)-\\d+]((,\\[(.+?)-\\d+])*)";
     public static final String WISH_LIST_INPUT_COMPILE_REGEX = "\\[(.*?)-(\\d+)]";
@@ -29,4 +35,5 @@ public class StoreConst {
     public static final String WISH_PRODUCT_OUT_OF_STOCK_MSG = "재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.";
     public static final String WISH_PRODUCT_INPUT_FORAT_ERROR_MSG = "올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.";
     public static final String WISH_PRODUCT_INPUT_ERROR_MSG = "잘못된 입력입니다. 다시 입력해 주세요.";
+    public static final String USER_CONFIRM_INPUT_ERROR = "잘못된 입력입니다. Y이나 N 한 글자로 입력해주세요.";
 }

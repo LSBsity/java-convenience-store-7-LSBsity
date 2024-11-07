@@ -13,7 +13,7 @@ import store.domain.model.product.CurrentProducts;
 import store.domain.model.product.Product;
 import store.domain.model.promotion.Promotion;
 import store.domain.model.promotion.PromotionType;
-import store.common.parser.dto.UserWish;
+import store.domain.model.dto.UserWish;
 
 import java.time.LocalDate;
 import java.util.List;
