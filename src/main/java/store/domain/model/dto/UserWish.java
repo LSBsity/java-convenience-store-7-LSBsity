@@ -1,4 +1,4 @@
-package store.common.parser.dto;
+package store.domain.model.dto;
 
 public class UserWish {
 

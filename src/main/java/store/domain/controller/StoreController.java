@@ -1,11 +1,12 @@
 package store.domain.controller;
 
-import store.common.constant.StoreConst;
-import store.common.parser.dto.UserWish;
-import store.common.parser.product.ProductParser;
-import store.common.parser.promotion.PromotionParser;
+import store.domain.model.dto.ConfirmedWishList;
+import store.domain.model.dto.StoreSuggestion;
+import store.domain.model.dto.UserWish;
 import store.domain.model.product.CurrentProducts;
-import store.domain.model.promotion.CurrentPromotions;
+import store.domain.model.promotion.UserAnswer;
+import store.domain.model.store.ConvenienceStore;
+import store.domain.model.store.Invoice;
 import store.domain.view.InputView;
 import store.domain.view.OutputView;
 
@@ -13,27 +14,28 @@ import java.util.List;
 
 public class StoreController {
 
+    private final ConvenienceStore convenienceStore;
     private final OutputView outputView;
     private final InputView inputView;
-    private final PromotionParser promotionParser;
-    private final ProductParser productParser;
 
-    public StoreController(OutputView outputView, InputView inputView, PromotionParser promotionParser, ProductParser productParser) {
+    public StoreController(ConvenienceStore convenienceStore, InputView inputView, OutputView outputView) {
+        this.convenienceStore = convenienceStore;
         this.outputView = outputView;
         this.inputView = inputView;
-        this.promotionParser = promotionParser;
-        this.productParser = productParser;
     }
 
     public void run() {
-        CurrentPromotions currentPromotions = promotionParser.parsePromotions(StoreConst.PROMOTIONS_FILE_PATH);
-        CurrentProducts currentProducts = productParser.parseProducts(StoreConst.PRODUCTS_FILE_PATH, currentPromotions);
-
+        CurrentProducts currentProducts = convenienceStore.getCurrentProducts();
         outputView.showStock(currentProducts);
         List<UserWish.Request> userWishList = inputView.getUserWishList(currentProducts);
-        for (UserWish.Request request : userWishList) {
-            System.out.println("request = " + request.getProductName());
-            System.out.println("request = " + request.getQuantity());
-        }
+
+        List<StoreSuggestion> storeSuggestions = convenienceStore.suggest(userWishList);
+        List<ConfirmedWishList> confirmedWishLists = inputView.showSuggestions(storeSuggestions);
+
+        UserAnswer isMemberShip = inputView.askMembershipSale();
+
+        Invoice invoice = convenienceStore.check(confirmedWishLists, isMemberShip);
+        outputView.showInvoice(invoice);
+
     }
 }
