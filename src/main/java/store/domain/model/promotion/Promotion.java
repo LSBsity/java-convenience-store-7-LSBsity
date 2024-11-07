@@ -40,7 +40,7 @@ public class Promotion {
     }
 
     public boolean isAvailable(LocalDate currentDate) {
-        return !currentDate.isBefore(startDate) && !currentDate.isAfter(endDate);
+        return !currentDate.isBefore(startDate) && !currentDate.isAfter(endDate) && promotionType != PromotionType.NONE;
     }
 
     public int getDefaultDefaultQuantity() {

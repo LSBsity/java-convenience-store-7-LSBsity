@@ -3,6 +3,8 @@ package store.domain.model.product;
 import store.common.constant.StoreConst;
 import store.domain.model.promotion.Promotion;
 
+import java.time.LocalDate;
+
 public class Product {
 
     private final String name;
@@ -51,6 +53,10 @@ public class Product {
         return this.promotion.getDefaultDefaultQuantity();
     }
 
+    public boolean isPromotionActive() {
+        return this.promotion.isAvailable(LocalDate.now());
+    }
+
     @Override
     public String toString() {
         String promotionMessage = StoreConst.EMPTY;
@@ -63,7 +69,7 @@ public class Product {
             quantityMessage = StoreConst.NOT_INSTOCK_MSG;
         }
 
-        return String.format("-%s %,d원 %s %s",
+        return String.format("- %s %,d원 %s %s",
                 this.name,
                 this.getPrice(),
                 quantityMessage,

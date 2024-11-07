@@ -1,7 +1,7 @@
 package store.common.parser.input;
 
 import store.domain.model.product.CurrentProducts;
-import store.common.parser.dto.UserWish;
+import store.domain.model.dto.UserWish;
 
 import java.util.List;
 

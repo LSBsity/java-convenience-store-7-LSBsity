@@ -4,7 +4,7 @@ import store.common.constant.StoreConst;
 import store.common.exception.BusinessException;
 import store.common.exception.ErrorCode;
 import store.domain.model.product.CurrentProducts;
-import store.common.parser.dto.UserWish;
+import store.domain.model.dto.UserWish;
 
 import java.util.ArrayList;
 import java.util.List;
