@@ -1,6 +1,6 @@
 package store.domain.model.store;
 
-import store.domain.model.dto.ConfirmedWishList;
+import store.domain.model.dto.ConfirmedProduct;
 import store.domain.model.dto.StoreSuggestion;
 import store.domain.model.dto.Suggestion;
 import store.domain.model.dto.UserWish;
@@ -108,18 +108,35 @@ public class ConvenienceStore {
         return suggestion.isAlreadySuggested() || !suggestion.isPromoted();
     }
 
-    public Invoice check(List<ConfirmedWishList> confirmedWishLists, UserAnswer isMemberShip) {
+    public Invoice check(List<ConfirmedProduct> confirmedProducts, UserAnswer isMemberShip) {
         Invoice invoice = new Invoice();
-        for (ConfirmedWishList confirmedWishList : confirmedWishLists) {
-            int promotionStock = confirmedWishList.getPromotionStock();
-            invoice.addPurchasedProduct(new ProductPair(confirmedWishList.getProduct(), confirmedWishList.getUserRequestSize()));
+
+        for (ConfirmedProduct confirmedWishList : confirmedProducts) {
+
+            ProductPair purchasedProduct = new ProductPair(confirmedWishList.getProduct(), confirmedWishList.getUserRequestSize());
+            invoice.addPurchasedProduct(purchasedProduct);
+
             if (confirmedWishList.isAvailablePromotion()) {
                 Product product = confirmedWishList.getProduct();
-                int promotionDefaultQuantity = confirmedWishList.getProduct().getPromotionDefaultQuantity();
-                invoice.addGiftProduct(new ProductPair(product, promotionStock / promotionDefaultQuantity));
+
+                int userGiftQuantity = getGiftProductQuantity(confirmedWishList);
+                ProductPair giftProduct = new ProductPair(product, userGiftQuantity);
+                invoice.addGiftProduct(giftProduct);
             }
         }
+
         invoice.takeSummary(isMemberShip);
         return invoice;
+    }
+
+    private static int getGiftProductQuantity(ConfirmedProduct confirmedWishList) {
+        int promotionStock = confirmedWishList.getPromotionStock();
+        int userRequestSize = confirmedWishList.getUserRequestSize();
+        int promotionDefaultQuantity = confirmedWishList.getPromotionDefaultQuantity();
+
+        int userEligibleGiftProductQuantity = userRequestSize / promotionDefaultQuantity;
+        int giftLimit = promotionStock / promotionDefaultQuantity;
+        int userGiftQuantity = Math.min(userEligibleGiftProductQuantity, giftLimit);
+        return userGiftQuantity;
     }
 }

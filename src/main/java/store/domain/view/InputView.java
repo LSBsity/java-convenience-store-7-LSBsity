@@ -4,7 +4,7 @@ import camp.nextstep.edu.missionutils.Console;
 import store.common.constant.StoreConst;
 import store.common.exception.BusinessException;
 import store.common.exception.ErrorCode;
-import store.domain.model.dto.ConfirmedWishList;
+import store.domain.model.dto.ConfirmedProduct;
 import store.domain.model.dto.StoreSuggestion;
 import store.domain.model.dto.Suggestion;
 import store.common.parser.input.InputParser;
@@ -38,7 +38,7 @@ public class InputView {
         System.out.println(StoreConst.NAME_QUANTITY_REQ_MSG);
     }
 
-    public List<ConfirmedWishList> showSuggestions(List<StoreSuggestion> storeSuggestions) {
+    public List<ConfirmedProduct> showSuggestions(List<StoreSuggestion> storeSuggestions) {
         return storeSuggestions.stream()
                 .map(this::suggestToUserAndTakeConfirm)
                 .toList();
@@ -65,7 +65,7 @@ public class InputView {
         throw new BusinessException(ErrorCode.USER_CONFIRM_INPUT_ERROR);
     }
 
-    private ConfirmedWishList suggestToUserAndTakeConfirm(StoreSuggestion storeSuggestion) {
+    private ConfirmedProduct suggestToUserAndTakeConfirm(StoreSuggestion storeSuggestion) {
         Suggestion suggestion = storeSuggestion.getSuggestion();
 
         String name = storeSuggestion.getProductName();
@@ -75,7 +75,7 @@ public class InputView {
         UserAnswer userAnswer = printSuggest(suggestion, name, offerSize);
 
         changeUserRequestQuantity(storeSuggestion, userAnswer, userRequestSize, offerSize);
-        return ConfirmedWishList.of(storeSuggestion.getProducts(), storeSuggestion.getUserRequestSize());
+        return ConfirmedProduct.of(storeSuggestion.getProducts(), storeSuggestion.getUserRequestSize());
     }
 
     private static void changeUserRequestQuantity(StoreSuggestion storeSuggestion, UserAnswer userAnswer, int userRequestSize, int offerSize) {

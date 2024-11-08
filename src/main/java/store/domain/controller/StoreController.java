@@ -1,6 +1,6 @@
 package store.domain.controller;
 
-import store.domain.model.dto.ConfirmedWishList;
+import store.domain.model.dto.ConfirmedProduct;
 import store.domain.model.dto.StoreSuggestion;
 import store.domain.model.dto.UserWish;
 import store.domain.model.product.CurrentProducts;
@@ -30,12 +30,13 @@ public class StoreController {
         List<UserWish.Request> userWishList = inputView.getUserWishList(currentProducts);
 
         List<StoreSuggestion> storeSuggestions = convenienceStore.suggest(userWishList);
-        List<ConfirmedWishList> confirmedWishLists = inputView.showSuggestions(storeSuggestions);
+        List<ConfirmedProduct> confirmedWishLists = inputView.showSuggestions(storeSuggestions);
 
         UserAnswer isMemberShip = inputView.askMembershipSale();
 
         Invoice invoice = convenienceStore.check(confirmedWishLists, isMemberShip);
         outputView.showInvoice(invoice);
 
+        //todo CurrentProducts 재고 갱신 로직 + 파일 다시 덮어쓰기 로직
     }
 }

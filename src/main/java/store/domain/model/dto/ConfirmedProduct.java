@@ -4,18 +4,18 @@ import store.domain.model.product.Product;
 
 import java.util.List;
 
-public class ConfirmedWishList {
+public class ConfirmedProduct {
 
     private final List<Product> products;
     private final int userRequestSize;
 
-    private ConfirmedWishList(List<Product> products, int userRequestSize) {
+    private ConfirmedProduct(List<Product> products, int userRequestSize) {
         this.products = products;
         this.userRequestSize = userRequestSize;
     }
 
-    public static ConfirmedWishList of(List<Product> products, int userRequestSize) {
-        return new ConfirmedWishList(products, userRequestSize);
+    public static ConfirmedProduct of(List<Product> products, int userRequestSize) {
+        return new ConfirmedProduct(products, userRequestSize);
     }
 
     public boolean isPromotionActive() {
@@ -44,5 +44,9 @@ public class ConfirmedWishList {
 
     public Product getProduct() {
         return this.products.getFirst();
+    }
+
+    public int getPromotionDefaultQuantity() {
+        return this.products.getFirst().getPromotionDefaultQuantity();
     }
 }

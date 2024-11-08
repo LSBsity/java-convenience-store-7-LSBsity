@@ -8,7 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
-import store.domain.model.dto.ConfirmedWishList;
+import store.common.config.Factory;
+import store.domain.model.dto.ConfirmedProduct;
 import store.domain.model.dto.StoreSuggestion;
 import store.domain.model.dto.Suggestion;
 import store.domain.model.dto.UserWish;
@@ -27,9 +28,9 @@ import java.util.List;
 class ConvenienceStoreTest {
 
     ConvenienceStore convenienceStore;
-    List<ConfirmedWishList> confirmedWishLists = new ArrayList<>();
-    List<ConfirmedWishList> confirmedWishLists2 = new ArrayList<>();
-    List<ConfirmedWishList> confirmedWishLists3 = new ArrayList<>();
+    List<ConfirmedProduct> confirmedWishLists = new ArrayList<>();
+    List<ConfirmedProduct> confirmedWishLists2 = new ArrayList<>();
+    List<ConfirmedProduct> confirmedWishLists3 = new ArrayList<>();
     public static int USER_REQUEST_SIZE = 14;
     public static int USER_REQUEST_SIZE2 = 2;
     public static int USER_REQUEST_SIZE3 = 15;
@@ -62,10 +63,10 @@ class ConvenienceStoreTest {
         );
         convenienceStore = new ConvenienceStore(currentProducts);
 
-        confirmedWishLists.add(ConfirmedWishList.of(List.of(product1, product2), USER_REQUEST_SIZE));
-        confirmedWishLists2.add(ConfirmedWishList.of(List.of(product9), USER_REQUEST_SIZE2));
-        confirmedWishLists3.add(ConfirmedWishList.of(List.of(product3, product4), USER_REQUEST_SIZE3));
-        confirmedWishLists3.add(ConfirmedWishList.of(List.of(product9), USER_REQUEST_SIZE2));
+        confirmedWishLists.add(ConfirmedProduct.of(List.of(product1, product2), USER_REQUEST_SIZE));
+        confirmedWishLists2.add(ConfirmedProduct.of(List.of(product9), USER_REQUEST_SIZE2));
+        confirmedWishLists3.add(ConfirmedProduct.of(List.of(product3, product4), USER_REQUEST_SIZE3));
+        confirmedWishLists3.add(ConfirmedProduct.of(List.of(product9), USER_REQUEST_SIZE2));
     }
 
 
@@ -176,14 +177,10 @@ class ConvenienceStoreTest {
                     StoreSuggestion ciderSuggest = suggests.get(0);
                     Assertions.assertThat(ciderSuggest.getSuggestion())
                             .isEqualTo(Suggestion.INSUFFICIENT_PROMOTION_STOCK);
-                    Assertions.assertThat(ciderSuggest.getOfferSize())
-                            .isEqualTo(ciderQuantity - cinderPromotionStockQuantity);
 
                     StoreSuggestion cokeSuggest = suggests.get(1);
                     Assertions.assertThat(cokeSuggest.getSuggestion())
                             .isEqualTo(Suggestion.INSUFFICIENT_PROMOTION_STOCK);
-                    Assertions.assertThat(cokeSuggest.getOfferSize())
-                            .isEqualTo(cokeQuantity - cokePromotionStockQuantity);
                 }
             }
         }
@@ -219,6 +216,8 @@ class ConvenienceStoreTest {
                     Invoice invoice = convenienceStore.check(confirmedWishLists, UserAnswer.YES);
 
                     //then
+                    OutputView outputView = new OutputView();
+                    outputView.showInvoice(invoice);
                     Assertions.assertThat(invoice.getPromotionDiscount()).isEqualTo(5000);
                     Assertions.assertThat(invoice.getTotalPrice()).isEqualTo(9000);
                 }

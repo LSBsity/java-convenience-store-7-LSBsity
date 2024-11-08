@@ -25,10 +25,18 @@ public class ProductPair {
     }
 
     public int calculateTotalPrice() {
-        return product.getPrice() * size;
+        return product.getPrice() * getSize();
     }
 
     public boolean inNotPromoted() {
         return !this.product.isPromotedProduct();
+    }
+
+    public String printPurchased() {
+        return String.format("%-5s\t\t\t%2d\t\t%-,5d\n", this.product.getName(), this.getSize(), this.calculateTotalPrice());
+    }
+
+    public String printGift() {
+        return String.format("%-5s\t\t\t%-5d\n", this.product.getName(), this.getSize());
     }
 }

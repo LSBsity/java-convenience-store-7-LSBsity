@@ -11,6 +11,8 @@ import store.domain.controller.StoreController;
 import store.domain.model.product.CurrentProducts;
 import store.domain.model.promotion.CurrentPromotions;
 import store.domain.model.store.ConvenienceStore;
+import store.domain.model.store.InvoiceService;
+import store.domain.model.store.PromotionService;
 import store.domain.view.InputView;
 import store.domain.view.OutputView;
 
@@ -30,6 +32,14 @@ public class Factory {
 
     public ConvenienceStore convenienceStore() {
         return new ConvenienceStore(currentProducts());
+    }
+
+    public PromotionService promotionService() {
+        return new PromotionService();
+    }
+
+    public InvoiceService invoiceService() {
+        return new InvoiceService();
     }
 
     public CurrentProducts currentProducts() {

@@ -1,10 +1,12 @@
 package store.domain.model.store;
 
+import store.common.constant.InvoicePrintConst;
 import store.common.constant.StoreConst;
 import store.domain.model.promotion.UserAnswer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Invoice {
 
@@ -87,5 +89,26 @@ public class Invoice {
 
     public int getTotalQuantity() {
         return this.purchasedProducts.stream().mapToInt(ProductPair::getSize).sum();
+    }
+
+    public String printSummary() {
+        return String.format(InvoicePrintConst.NO_DISCOUNTED_PRICE, InvoicePrintConst.NO_DISCOUNTED_PRICE_NAME, getTotalQuantity(), getNotDiscountedPrice()) +
+                String.format(InvoicePrintConst.PROMOTION_DISCOUNTED_PRICE, InvoicePrintConst.PROMOTION_DISCOUNTED_PRICE_NAME, getPromotionDiscount()) +
+                String.format(InvoicePrintConst.MEMBERSHIP_DISCOUNTED_PRICE, InvoicePrintConst.MEMBERSHIP_DISCOUNTED_PRICE_NAME, getMembershipDiscount()) +
+                String.format(InvoicePrintConst.TOTAL_PRICE, InvoicePrintConst.TOTAL_PRICE_NAME, getTotalPrice());
+    }
+
+    public String printPurchasedProduct() {
+        System.out.println(InvoicePrintConst.PRINT_NAME_QUANTITY_PRICE);
+        return this.purchasedProducts.stream()
+                .map(ProductPair::printPurchased)
+                .collect(Collectors.joining());
+    }
+
+    public String printGifts() {
+        System.out.println(InvoicePrintConst.PRINT_GIFT_TITLE);
+        return this.giftProducts.stream()
+                .map(ProductPair::printGift)
+                .collect(Collectors.joining());
     }
 }
