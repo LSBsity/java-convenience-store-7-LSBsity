@@ -1,4 +1,4 @@
-package store.domain.testunit;
+package store.common.testunit;
 
 import store.domain.model.dto.ConfirmedProduct;
 

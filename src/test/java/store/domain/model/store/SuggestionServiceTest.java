@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import store.domain.model.dto.ConfirmedProduct;
 import store.domain.model.dto.StoreSuggestion;
-import store.domain.model.dto.Suggestion;
+import store.domain.model.dto.SuggestionType;
 import store.domain.model.product.CurrentProducts;
 import store.domain.model.product.Product;
 import store.domain.model.promotion.Promotion;
@@ -79,8 +79,8 @@ class SuggestionServiceTest {
 
                     //then
                     storeSuggestions.forEach(suggest ->
-                            Assertions.assertThat(suggest.getSuggestion())
-                                    .isEqualTo(Suggestion.ALREADY_ELIGIBLE));
+                            Assertions.assertThat(suggest.getSuggestionType())
+                                    .isEqualTo(SuggestionType.ALREADY_ELIGIBLE));
                 }
 
                 @ParameterizedTest
@@ -128,7 +128,7 @@ class SuggestionServiceTest {
                         //then
                         storeSuggestions.forEach(suggest ->
                                 Assertions.assertThat(
-                                        suggest.getSuggestion()).isEqualTo(Suggestion.ADDITIONAL_FREE_PRODUCT)
+                                        suggest.getSuggestionType()).isEqualTo(SuggestionType.ADDITIONAL_FREE_PRODUCT)
                         );
                     }
                 }
@@ -151,8 +151,8 @@ class SuggestionServiceTest {
 
                     //then
                     storeSuggestions.forEach(storeSuggestion ->
-                            Assertions.assertThat(storeSuggestion.getSuggestion())
-                                    .isEqualTo(Suggestion.INSUFFICIENT_PROMOTION_STOCK)
+                            Assertions.assertThat(storeSuggestion.getSuggestionType())
+                                    .isEqualTo(SuggestionType.INSUFFICIENT_PROMOTION_STOCK)
                     );
                 }
             }
@@ -177,7 +177,7 @@ class SuggestionServiceTest {
                     //then
                     storeSuggestions.forEach(suggest ->
                             Assertions.assertThat(
-                                    suggest.getSuggestion()).isEqualTo(Suggestion.EXCESSIVE_ADDITIONAL_PURCHASE)
+                                    suggest.getSuggestionType()).isEqualTo(SuggestionType.EXCESSIVE_ADDITIONAL_PURCHASE)
                     );
                 }
             }
@@ -204,7 +204,7 @@ class SuggestionServiceTest {
                 void addOne1(int userRequestSize) {
                     //given
                     StoreSuggestion cokeSuggestion = StoreSuggestion.of(List.of(cokeOPO, cokeNON), userRequestSize);
-                    cokeSuggestion.changeSuggestion(Suggestion.ADDITIONAL_FREE_PRODUCT);
+                    cokeSuggestion.changeSuggestion(SuggestionType.ADDITIONAL_FREE_PRODUCT);
 
                     ConfirmedProduct confirmedProduct = ConfirmedProduct.of(cokeSuggestion, userAnswer);
 
@@ -221,7 +221,7 @@ class SuggestionServiceTest {
                 void addOne(int userRequestSize) {
                     //given
                     StoreSuggestion ciderSuggestion = StoreSuggestion.of(List.of(ciderTPO, ciderNON), userRequestSize);
-                    ciderSuggestion.changeSuggestion(Suggestion.ADDITIONAL_FREE_PRODUCT);
+                    ciderSuggestion.changeSuggestion(SuggestionType.ADDITIONAL_FREE_PRODUCT);
 
                     ConfirmedProduct confirmedProduct = ConfirmedProduct.of(ciderSuggestion, UserAnswer.YES);
 
@@ -245,7 +245,7 @@ class SuggestionServiceTest {
                 void addOne1(int userRequestSize) {
                     //given
                     StoreSuggestion cokeSuggestion = StoreSuggestion.of(List.of(cokeOPO, cokeNON), userRequestSize);
-                    cokeSuggestion.changeSuggestion(Suggestion.ADDITIONAL_FREE_PRODUCT);
+                    cokeSuggestion.changeSuggestion(SuggestionType.ADDITIONAL_FREE_PRODUCT);
 
                     ConfirmedProduct confirmedProduct = ConfirmedProduct.of(cokeSuggestion, userAnswer);
 
@@ -262,7 +262,7 @@ class SuggestionServiceTest {
                 void addOne2(int userRequestSize) {
                     //given
                     StoreSuggestion ciderSuggestion = StoreSuggestion.of(List.of(ciderTPO, ciderNON), userRequestSize);
-                    ciderSuggestion.changeSuggestion(Suggestion.ADDITIONAL_FREE_PRODUCT);
+                    ciderSuggestion.changeSuggestion(SuggestionType.ADDITIONAL_FREE_PRODUCT);
 
                     ConfirmedProduct confirmedProduct = ConfirmedProduct.of(ciderSuggestion, userAnswer);
 
@@ -286,7 +286,7 @@ class SuggestionServiceTest {
                 void changeToMaximumEligibleQuantity(int userRequestSize) {
                     //given
                     StoreSuggestion ciderSuggestion = StoreSuggestion.of(List.of(ciderTPO, ciderNON), userRequestSize);
-                    ciderSuggestion.changeSuggestion(Suggestion.INSUFFICIENT_PROMOTION_STOCK);
+                    ciderSuggestion.changeSuggestion(SuggestionType.INSUFFICIENT_PROMOTION_STOCK);
 
                     ConfirmedProduct confirmedProduct = ConfirmedProduct.of(ciderSuggestion, userAnswer);
 
@@ -316,7 +316,7 @@ class SuggestionServiceTest {
                 void changeToMaximumEligibleQuantity(int userRequestSize) {
                     //given
                     StoreSuggestion ciderSuggestion = StoreSuggestion.of(List.of(ciderTPO, ciderNON), userRequestSize);
-                    ciderSuggestion.changeSuggestion(Suggestion.INSUFFICIENT_PROMOTION_STOCK);
+                    ciderSuggestion.changeSuggestion(SuggestionType.INSUFFICIENT_PROMOTION_STOCK);
 
                     ConfirmedProduct confirmedProduct = ConfirmedProduct.of(ciderSuggestion, userAnswer);
 
@@ -346,7 +346,7 @@ class SuggestionServiceTest {
                 void decreaseOneToEligibleTwoPlusOne(int userRequestSize) {
                     //given
                     StoreSuggestion ciderSuggestion = StoreSuggestion.of(List.of(ciderTPO, ciderNON), userRequestSize);
-                    ciderSuggestion.changeSuggestion(Suggestion.EXCESSIVE_ADDITIONAL_PURCHASE);
+                    ciderSuggestion.changeSuggestion(SuggestionType.EXCESSIVE_ADDITIONAL_PURCHASE);
 
                     ConfirmedProduct confirmedProduct = ConfirmedProduct.of(ciderSuggestion, userAnswer);
 
@@ -370,7 +370,7 @@ class SuggestionServiceTest {
                 void decreaseOneToEligibleTwoPlusOne(int userRequestSize) {
                     //given
                     StoreSuggestion ciderSuggestion = StoreSuggestion.of(List.of(ciderTPO, ciderNON), userRequestSize);
-                    ciderSuggestion.changeSuggestion(Suggestion.EXCESSIVE_ADDITIONAL_PURCHASE);
+                    ciderSuggestion.changeSuggestion(SuggestionType.EXCESSIVE_ADDITIONAL_PURCHASE);
 
                     ConfirmedProduct confirmedProduct = ConfirmedProduct.of(ciderSuggestion, userAnswer);
 

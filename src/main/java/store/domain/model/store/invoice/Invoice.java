@@ -12,22 +12,22 @@ import java.util.stream.Collectors;
 
 public class Invoice {
 
-    private final List<ProductPair> purchasedProducts;
-    private final List<ProductPair> giftProducts;
+    private final List<ProductInfo> purchasedProducts;
+    private final List<ProductInfo> giftProducts;
 
-    private int notDiscountedPrice = 0;
-    private int promotionDiscount = 0;
-    private int membershipDiscount = 0;
+    private int originalPrice = 0;
+    private int promotionDiscountAmount = 0;
+    private int membershipDiscountAmount = 0;
     private int totalPrice = 0;
 
-    public Invoice(List<ProductPair> purchasedProducts, List<ProductPair> giftProducts) {
+    public Invoice(List<ProductInfo> purchasedProducts, List<ProductInfo> giftProducts) {
         this.purchasedProducts = purchasedProducts;
         this.giftProducts = giftProducts;
     }
 
     public static Invoice issue(List<ConfirmedProduct> confirmedProducts) {
-        List<ProductPair> purchasedProducts = new ArrayList<>();
-        List<ProductPair> giftProducts = new ArrayList<>();
+        List<ProductInfo> purchasedProducts = new ArrayList<>();
+        List<ProductInfo> giftProducts = new ArrayList<>();
 
         for (ConfirmedProduct confirmedWishList : confirmedProducts) {
             addGiftProduct(confirmedWishList, giftProducts);
@@ -37,24 +37,24 @@ public class Invoice {
         return new Invoice(purchasedProducts, giftProducts);
     }
 
-    private static void addNormalProduct(ConfirmedProduct confirmedWishList, List<ProductPair> purchasedProducts) {
+    private static void addNormalProduct(ConfirmedProduct confirmedWishList, List<ProductInfo> purchasedProducts) {
         int userRequestSize = confirmedWishList.getUserRequestSize();
         if (userRequestSize == 0) return;
 
         Product normalProduct = confirmedWishList.getProduct();
-        ProductPair product = ProductPair.of(normalProduct, userRequestSize);
+        ProductInfo product = ProductInfo.of(normalProduct, userRequestSize);
 
         purchasedProducts.add(product);
     }
 
-    private static void addGiftProduct(ConfirmedProduct confirmedWishList, List<ProductPair> giftProducts) {
+    private static void addGiftProduct(ConfirmedProduct confirmedWishList, List<ProductInfo> giftProducts) {
         if (!confirmedWishList.isAvailablePromotion()) return;
 
         int userGiftQuantity = getGiftProductQuantity(confirmedWishList);
         if (userGiftQuantity == 0) return;
 
         Product promotionProduct = confirmedWishList.getPromotionProduct();
-        ProductPair product = ProductPair.of(promotionProduct, userGiftQuantity);
+        ProductInfo product = ProductInfo.of(promotionProduct, userGiftQuantity);
 
         giftProducts.add(product);
     }
@@ -70,32 +70,32 @@ public class Invoice {
         return userGiftQuantity;
     }
 
-    public void setNotDiscountedPrice(int totalAmountPaid) {
-        this.notDiscountedPrice = totalAmountPaid;
+    public void setOriginalPrice(int totalAmountPaid) {
+        this.originalPrice = totalAmountPaid;
     }
 
-    public void setPromotionDiscount(int promotionDiscount) {
-        this.promotionDiscount += promotionDiscount;
+    public void setPromotionDiscountAmount(int promotionDiscountAmount) {
+        this.promotionDiscountAmount += promotionDiscountAmount;
     }
 
-    public void setMembershipDiscount(int membershipDiscount) {
-        this.membershipDiscount += membershipDiscount;
+    public void setMembershipDiscountAmount(int membershipDiscountAmount) {
+        this.membershipDiscountAmount += membershipDiscountAmount;
     }
 
-    public int getNonDiscountedPrice() {
-        return notDiscountedPrice;
+    public int getOriginalPrice() {
+        return originalPrice;
     }
 
     public void setTotalPrice(int finalAmount) {
         this.totalPrice += finalAmount;
     }
 
-    public int getPromotionDiscount() {
-        return promotionDiscount;
+    public int getPromotionDiscountAmount() {
+        return promotionDiscountAmount;
     }
 
-    public int getMembershipDiscount() {
-        return membershipDiscount;
+    public int getMembershipDiscountAmount() {
+        return membershipDiscountAmount;
     }
 
     public int getTotalPrice() {
@@ -105,22 +105,22 @@ public class Invoice {
     public void takeSummary(UserAnswer isMemberShip) {
         int nondiscountedPrice = calculateNonDiscountedPrice();
         int totalGiftPrice = calculateTotalGiftPrice();
-        setNotDiscountedPrice(nondiscountedPrice);
+        setOriginalPrice(nondiscountedPrice);
         setMembershipDiscountIfAnswered(isMemberShip);
-        setPromotionDiscount(totalGiftPrice);
-        setTotalPrice(nondiscountedPrice - promotionDiscount - membershipDiscount);
+        setPromotionDiscountAmount(totalGiftPrice);
+        setTotalPrice(nondiscountedPrice - promotionDiscountAmount - membershipDiscountAmount);
     }
 
     private void setMembershipDiscountIfAnswered(UserAnswer isMemberShip) {
         if (isMemberShip == UserAnswer.YES) {
             int membershipDiscountPrice = calculateMembershipDiscount();
-            setMembershipDiscount(membershipDiscountPrice);
+            setMembershipDiscountAmount(membershipDiscountPrice);
         }
     }
 
     private int calculateNonDiscountedPrice() {
         return purchasedProducts.stream()
-                .mapToInt(ProductPair::calculateTotalPrice)
+                .mapToInt(ProductInfo::calculateTotalPrice)
                 .sum();
     }
 
@@ -132,32 +132,32 @@ public class Invoice {
 
     private int calculateMembershipDiscount() {
         return (int) (purchasedProducts.stream()
-                .filter(productPair -> productPair.inNotPromoted() || productPair.expired())
-                .mapToInt(ProductPair::calculateTotalPrice)
+                .filter(productPair -> productPair.inNotPromoted() || productPair.isExpired())
+                .mapToInt(ProductInfo::calculateTotalPrice)
                 .sum() * StoreConst.MEMBERSHIP_DISCOUNT_RATE);
     }
 
 
     public int getTotalQuantity() {
-        return this.purchasedProducts.stream().mapToInt(ProductPair::getSize).sum();
+        return this.purchasedProducts.stream().mapToInt(ProductInfo::getSize).sum();
     }
 
     public String printSummary() {
-        return String.format(InvoicePrintConst.NO_DISCOUNTED_PRICE, InvoicePrintConst.NO_DISCOUNTED_PRICE_NAME, getTotalQuantity(), getNonDiscountedPrice()) +
-                String.format(InvoicePrintConst.PROMOTION_DISCOUNTED_PRICE, InvoicePrintConst.PROMOTION_DISCOUNTED_PRICE_NAME, getPromotionDiscount()) +
-                String.format(InvoicePrintConst.MEMBERSHIP_DISCOUNTED_PRICE, InvoicePrintConst.MEMBERSHIP_DISCOUNTED_PRICE_NAME, getMembershipDiscount()) +
+        return String.format(InvoicePrintConst.NO_DISCOUNTED_PRICE, InvoicePrintConst.NO_DISCOUNTED_PRICE_NAME, getTotalQuantity(), getOriginalPrice()) +
+                String.format(InvoicePrintConst.PROMOTION_DISCOUNTED_PRICE, InvoicePrintConst.PROMOTION_DISCOUNTED_PRICE_NAME, getPromotionDiscountAmount()) +
+                String.format(InvoicePrintConst.MEMBERSHIP_DISCOUNTED_PRICE, InvoicePrintConst.MEMBERSHIP_DISCOUNTED_PRICE_NAME, getMembershipDiscountAmount()) +
                 String.format(InvoicePrintConst.TOTAL_PRICE, InvoicePrintConst.TOTAL_PRICE_NAME, getTotalPrice());
     }
 
     public String printPurchasedProduct() {
         return this.purchasedProducts.stream()
-                .map(ProductPair::printPurchased)
+                .map(ProductInfo::printPurchased)
                 .collect(Collectors.joining());
     }
 
     public String printGifts() {
         return this.giftProducts.stream()
-                .map(ProductPair::printGift)
+                .map(ProductInfo::printGift)
                 .collect(Collectors.joining());
     }
 }

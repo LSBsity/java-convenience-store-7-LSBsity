@@ -46,9 +46,7 @@ public class RegexInputParser implements InputParser {
     }
 
     private void ensureProductExists(CurrentProducts products, String productName) {
-        if (products.findProductByName(productName) == null) {
-            throw new BusinessException(ErrorCode.WISH_PRODUCT_NOT_EXIST_ERROR);
-        }
+        products.findProductByName(productName);
     }
 
     private void ensureSufficientStock(CurrentProducts currentProducts, String productName, int requestedQuantity) {

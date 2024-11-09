@@ -1,26 +1,26 @@
 package store.domain.model.store;
 
-import store.domain.model.dto.*;
+import store.domain.model.dto.ConfirmedProduct;
+import store.domain.model.dto.StoreSuggestion;
+import store.domain.model.dto.UserWish;
 import store.domain.model.product.CurrentProducts;
 import store.domain.model.product.Product;
 import store.domain.model.promotion.UserAnswer;
 import store.domain.model.store.invoice.Invoice;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-public class ConvenienceStoreService {
+public class StoreManager {
 
     private final CurrentProducts currentProducts;
     private final SuggestionService suggestionService;
     private final StockService stockService;
 
-    public ConvenienceStoreService(CurrentProducts currentProducts, SuggestionService suggestionService, StockService stockService) {
+    public StoreManager(CurrentProducts currentProducts, SuggestionService suggestionService, StockService stockService) {
         this.currentProducts = currentProducts;
         this.suggestionService = suggestionService;
         this.stockService = stockService;
-
     }
 
     public CurrentProducts getCurrentProducts() {
@@ -38,38 +38,29 @@ public class ConvenienceStoreService {
         confirmedProduct.forEach(stockService::updateStock);
     }
 
-
     public void suggestHandle(List<ConfirmedProduct> confirmedProducts) {
         confirmedProducts.forEach(suggestionService::adjustUserRequestQuantity);
     }
 
-
-    public boolean isNotEmpty() {
-        return this.currentProducts.getCurrentProducts().keySet().stream()
-                .anyMatch(key -> hasAtLeastOneStock(key, this.currentProducts.getCurrentProducts()));
-    }
-
-    private boolean hasAtLeastOneStock(String key, Map<String, List<Product>> currentProductsMap) {
-        return currentProductsMap.get(key)
-                .stream()
-                .anyMatch(product -> product.getCurrentQuantity() != 0);
+    public boolean hasAvailableStock() {
+        return this.currentProducts.hasAvailableStock();
     }
 
     public List<StoreSuggestion> suggest(List<UserWish.Request> userWishList) {
         List<StoreSuggestion> suggestions = userWishList.stream()
-                .map(request -> createDefaultSuggestion(request, currentProducts))
+                .map(this::createSuggestion)
                 .collect(Collectors.toList());
 
         suggestionService.suggest(suggestions);
         return suggestions;
     }
 
-    private StoreSuggestion createDefaultSuggestion(UserWish.Request request, CurrentProducts currentProducts) {
-        String productName = request.getProductName();
-        int quantity = request.getQuantity();
+    private StoreSuggestion createSuggestion(UserWish.Request request) {
+        String requestProductName = request.getProductName();
+        int requestQuantity = request.getQuantity();
 
-        List<Product> availableProducts = currentProducts.findProductByName(productName);
+        List<Product> findProducts = currentProducts.findProductByName(requestProductName);
 
-        return StoreSuggestion.of(availableProducts, quantity);
+        return StoreSuggestion.of(findProducts, requestQuantity);
     }
 }

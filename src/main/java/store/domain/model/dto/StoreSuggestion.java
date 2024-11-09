@@ -12,7 +12,7 @@ public class StoreSuggestion {
     private final List<Product> products;
     private int userRequestSize;
 
-    private Suggestion suggestion = Suggestion.NONE;
+    private SuggestionType suggestion = SuggestionType.NONE;
     private int offerSize = 0;
 
     private StoreSuggestion(List<Product> products, int requestSize) {
@@ -28,7 +28,7 @@ public class StoreSuggestion {
         return userRequestSize;
     }
 
-    public Suggestion getSuggestion() {
+    public SuggestionType getSuggestionType() {
         return this.suggestion;
     }
 
@@ -54,7 +54,7 @@ public class StoreSuggestion {
         return products.stream().anyMatch(Product::isPromotionActive);
     }
 
-    public void changeSuggestion(Suggestion suggestion) {
+    public void changeSuggestion(SuggestionType suggestion) {
         this.suggestion = suggestion;
     }
 
@@ -79,7 +79,7 @@ public class StoreSuggestion {
     }
 
     public boolean isAlreadySuggested() {
-        return this.suggestion != Suggestion.NONE;
+        return this.suggestion != SuggestionType.NONE;
     }
 
     public String getProductName() {

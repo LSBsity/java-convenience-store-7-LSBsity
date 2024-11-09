@@ -80,7 +80,7 @@ public class InputView {
     }
 
     private UserAnswer printSuggestionAndGetConfirmation(StoreSuggestion storeSuggestion) {
-        Suggestion suggestion = storeSuggestion.getSuggestion();
+        SuggestionType suggestion = storeSuggestion.getSuggestionType();
         if (!suggestion.isShouldPrint()) return UserAnswer.NO;
 
         System.out.printf(suggestion.getFormat(), storeSuggestion.getProductName(), storeSuggestion.getOfferSize());

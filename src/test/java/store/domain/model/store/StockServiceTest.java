@@ -8,7 +8,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import store.domain.model.dto.ConfirmedProduct;
 import store.domain.model.dto.StoreSuggestion;
-import store.domain.model.dto.Suggestion;
+import store.domain.model.dto.SuggestionType;
 import store.domain.model.product.CurrentProducts;
 import store.domain.model.product.Product;
 import store.domain.model.promotion.Promotion;
@@ -87,7 +87,7 @@ class StockServiceTest {
                     //given
 
                     StoreSuggestion cokeSuggestion = StoreSuggestion.of(List.of(cokeOPO, cokeNON), userRequestSize);
-                    cokeSuggestion.changeSuggestion(Suggestion.ADDITIONAL_FREE_PRODUCT);
+                    cokeSuggestion.changeSuggestion(SuggestionType.ADDITIONAL_FREE_PRODUCT);
 
                     ConfirmedProduct confirmedProduct = ConfirmedProduct.of(cokeSuggestion, null);
 
@@ -121,7 +121,7 @@ class StockServiceTest {
                         void decreaseRemainderInDefaultStock(int userRequestSize) {
                             //given
                             StoreSuggestion ciderSuggestion = StoreSuggestion.of(List.of(ciderTPO, ciderNON), userRequestSize);
-                            ciderSuggestion.changeSuggestion(Suggestion.INSUFFICIENT_PROMOTION_STOCK);
+                            ciderSuggestion.changeSuggestion(SuggestionType.INSUFFICIENT_PROMOTION_STOCK);
 
                             ConfirmedProduct confirmedProduct = ConfirmedProduct.of(ciderSuggestion, UserAnswer.YES);
 
@@ -144,7 +144,7 @@ class StockServiceTest {
                         void decreaseRemainderInPromotionStock(int userRequestSize) {
                             //given
                             StoreSuggestion ciderSuggestion = StoreSuggestion.of(List.of(ciderTPO, ciderNON), userRequestSize);
-                            ciderSuggestion.changeSuggestion(Suggestion.INSUFFICIENT_PROMOTION_STOCK);
+                            ciderSuggestion.changeSuggestion(SuggestionType.INSUFFICIENT_PROMOTION_STOCK);
 
                             ConfirmedProduct confirmedProduct = ConfirmedProduct.of(ciderSuggestion, UserAnswer.YES);
 
@@ -170,7 +170,7 @@ class StockServiceTest {
                     void decreaseRemainderInDefaultStock(int userRequestSize) {
                         //given
                         StoreSuggestion ciderSuggestion = StoreSuggestion.of(List.of(ciderTPO, ciderNON), userRequestSize);
-                        ciderSuggestion.changeSuggestion(Suggestion.INSUFFICIENT_PROMOTION_STOCK);
+                        ciderSuggestion.changeSuggestion(SuggestionType.INSUFFICIENT_PROMOTION_STOCK);
 
                         ConfirmedProduct confirmedProduct = ConfirmedProduct.of(ciderSuggestion, UserAnswer.NO);
 
@@ -198,7 +198,7 @@ class StockServiceTest {
                 void decreasePromotionStock(int userRequestSize) {
                     //given
                     StoreSuggestion ciderSuggestion = StoreSuggestion.of(List.of(ciderTPO, ciderNON), userRequestSize);
-                    ciderSuggestion.changeSuggestion(Suggestion.EXCESSIVE_ADDITIONAL_PURCHASE);
+                    ciderSuggestion.changeSuggestion(SuggestionType.EXCESSIVE_ADDITIONAL_PURCHASE);
                     ConfirmedProduct confirmedProduct = ConfirmedProduct.of(ciderSuggestion, UserAnswer.YES);
 
                     int before = ciderNON.getCurrentQuantity();
@@ -217,7 +217,7 @@ class StockServiceTest {
                 void decreasePromotionStockSubtractOne(int userRequestSize) {
                     //given
                     StoreSuggestion ciderSuggestion = StoreSuggestion.of(List.of(ciderTPO, ciderNON), userRequestSize);
-                    ciderSuggestion.changeSuggestion(Suggestion.EXCESSIVE_ADDITIONAL_PURCHASE);
+                    ciderSuggestion.changeSuggestion(SuggestionType.EXCESSIVE_ADDITIONAL_PURCHASE);
                     ConfirmedProduct confirmedProduct = ConfirmedProduct.of(ciderSuggestion, UserAnswer.NO);
 
                     int before = ciderNON.getCurrentQuantity();
@@ -244,7 +244,7 @@ class StockServiceTest {
                     //given
 
                     StoreSuggestion cokeSuggestion = StoreSuggestion.of(List.of(cokeOPO, cokeNON), userRequestSize);
-                    cokeSuggestion.changeSuggestion(Suggestion.ALREADY_ELIGIBLE);
+                    cokeSuggestion.changeSuggestion(SuggestionType.ALREADY_ELIGIBLE);
 
                     ConfirmedProduct confirmedProduct = ConfirmedProduct.of(cokeSuggestion, null);
 
@@ -273,7 +273,7 @@ class StockServiceTest {
                         Product chocoTPO = Product.of("초코바", 1200, 5, expired, true, false);
                         Product chocoNON = Product.of("초코바", 1200, 5, Promotion.createNone(), false, false);
                         StoreSuggestion chocoSuggestion = StoreSuggestion.of(List.of(chocoTPO, chocoNON), userRequestSize);
-                        chocoSuggestion.changeSuggestion(Suggestion.NONE);
+                        chocoSuggestion.changeSuggestion(SuggestionType.NONE);
 
                         ConfirmedProduct confirmedProduct = ConfirmedProduct.of(chocoSuggestion, null);
                         int beforePromotionQuantity = chocoTPO.getCurrentQuantity();
@@ -302,7 +302,7 @@ class StockServiceTest {
                         Product chocoTPO = Product.of("초코바", 1200, 5, expired, true, false);
                         Product chocoNON = Product.of("초코바", 1200, 5, Promotion.createNone(), false, false);
                         StoreSuggestion chocoSuggestion = StoreSuggestion.of(List.of(chocoTPO, chocoNON), userRequestSize);
-                        chocoSuggestion.changeSuggestion(Suggestion.NONE);
+                        chocoSuggestion.changeSuggestion(SuggestionType.NONE);
 
                         ConfirmedProduct confirmedProduct = ConfirmedProduct.of(chocoSuggestion, null);
                         int before = chocoNON.getCurrentQuantity();

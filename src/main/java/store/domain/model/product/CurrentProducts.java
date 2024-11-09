@@ -16,16 +16,14 @@ public class CurrentProducts {
     }
 
     public static CurrentProducts create(List<Product> productList) {
-        // 이름 별 Grouping, 각 List<Product>는 프로모션이 있는 제품이 맨 앞에 오도록 정렬
         Map<String, List<Product>> productMap = productList.stream()
                 .collect(Collectors.groupingBy(
                         Product::getName,
                         LinkedHashMap::new,
-                        Collectors.collectingAndThen(Collectors.toList(), productComparator())
+                        Collectors.collectingAndThen(Collectors.toList(),productComparator())
                 ));
 
         addDefaultProductIfOnlyPromotedExists(productMap);
-
         return new CurrentProducts(productMap);
     }
 
@@ -55,7 +53,8 @@ public class CurrentProducts {
     }
 
     public boolean isNotExistProduct(String name) {
-        return this.currentProducts.containsKey(name) == false;
+        return this.currentProducts
+                .containsKey(name) == false;
     }
 
     public int getCurrentTotalStockQuantity(String name) {
@@ -63,6 +62,17 @@ public class CurrentProducts {
                 .stream()
                 .mapToInt(Product::getCurrentQuantity)
                 .sum();
+    }
+
+    public boolean hasAvailableStock() {
+        return this.currentProducts.keySet().stream()
+                .anyMatch(key -> hasAtLeastOneStock(key, getCurrentProducts()));
+    }
+
+    private boolean hasAtLeastOneStock(String key, Map<String, List<Product>> currentProductsMap) {
+        return currentProductsMap.get(key)
+                .stream()
+                .anyMatch(product -> product.getCurrentQuantity() != 0);
     }
 
     private static Function<List<Product>, List<Product>> productComparator() {

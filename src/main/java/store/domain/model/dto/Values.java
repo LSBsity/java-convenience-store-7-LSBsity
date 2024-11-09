@@ -1,9 +1,7 @@
-package store.domain.model.store;
-
-import store.domain.model.dto.StoreSuggestion;
+package store.domain.model.dto;
 
 public record Values(int promotionAvailableStockQuantity, int maximum, int normalDecrease, int normalStockQuantity) {
-    static Values getValues(StoreSuggestion storeSuggestion) {
+     public static Values getValues(StoreSuggestion storeSuggestion) {
         int promotionAvailableStockQuantity = storeSuggestion.getPromotionAvailableStockQuantity(); // 총 프로모션 재고
         int defaultSize = storeSuggestion.getPromotionDefaultQuantity(); // 프로모션 디폴트 개수
         int maximum = promotionAvailableStockQuantity / defaultSize * defaultSize; // 프로모션 적용 가능한 최대 개수

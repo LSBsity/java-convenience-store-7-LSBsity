@@ -23,8 +23,8 @@ public class ConfirmedProduct {
         return storeSuggestion;
     }
 
-    public Suggestion getSuggestion() {
-        return this.storeSuggestion.getSuggestion();
+    public SuggestionType getSuggestionType() {
+        return this.storeSuggestion.getSuggestionType();
     }
 
     public UserAnswer getUserAnswer() {
@@ -71,7 +71,7 @@ public class ConfirmedProduct {
         return this.storeSuggestion.getProducts().getFirst().getPromotionDefaultQuantity();
     }
 
-    public void addUserRequestSize() {
+    public void increaseUserRequestSize() {
         this.storeSuggestion.addUserRequestSize();
     }
 

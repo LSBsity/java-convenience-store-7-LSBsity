@@ -16,7 +16,7 @@ import store.domain.model.promotion.Promotion;
 import store.domain.model.promotion.PromotionType;
 import store.domain.model.promotion.UserAnswer;
 import store.domain.model.store.invoice.Invoice;
-import store.domain.testunit.TestConfirmedProduct;
+import store.common.testunit.TestConfirmedProduct;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,7 +24,7 @@ import java.util.List;
 @DisplayName("⭐편의점 서비스 테스트")
 class ConvenienceStoreServiceTest {
 
-    ConvenienceStoreService convenienceStore;
+    StoreManager convenienceStore;
 
     static int USER_REQUEST_SIZE = 14;
     static int USER_REQUEST_SIZE2 = 2;
@@ -56,7 +56,7 @@ class ConvenienceStoreServiceTest {
     @BeforeEach
     void setUp() {
         currentProducts = CurrentProducts.create(List.of(cokeOPO, cokeNON, ciderTPO, ciderNON, juiceTPO, juiceNON, sparklingWaterTPO, vitaminWaterTPO, lunchBoxNON));
-        convenienceStore = new ConvenienceStoreService(currentProducts, new SuggestionService(), new StockService());
+        convenienceStore = new StoreManager(currentProducts, new SuggestionService(), new StockService());
     }
 
     @Nested
@@ -81,7 +81,7 @@ class ConvenienceStoreServiceTest {
                     Invoice invoice = convenienceStore.issueInvoice(confirmedProducts, UserAnswer.YES);
 
                     //then
-                    Assertions.assertThat(invoice.getMembershipDiscount()).isEqualTo(0);
+                    Assertions.assertThat(invoice.getMembershipDiscountAmount()).isEqualTo(0);
                 }
 
                 @Test
@@ -96,7 +96,7 @@ class ConvenienceStoreServiceTest {
                     Invoice invoice = convenienceStore.issueInvoice(confirmedProducts, UserAnswer.YES);
 
                     //then
-                    Assertions.assertThat(invoice.getPromotionDiscount()).isEqualTo(5000);
+                    Assertions.assertThat(invoice.getPromotionDiscountAmount()).isEqualTo(5000);
                     Assertions.assertThat(invoice.getTotalPrice()).isEqualTo(9000);
                 }
 
@@ -112,8 +112,8 @@ class ConvenienceStoreServiceTest {
                     Invoice invoice = convenienceStore.issueInvoice(confirmedProducts, UserAnswer.YES);
 
                     //then
-                    Assertions.assertThat(invoice.getPromotionDiscount()).isEqualTo(2000);
-                    Assertions.assertThat(invoice.getMembershipDiscount()).isEqualTo(3840);
+                    Assertions.assertThat(invoice.getPromotionDiscountAmount()).isEqualTo(2000);
+                    Assertions.assertThat(invoice.getMembershipDiscountAmount()).isEqualTo(3840);
                     Assertions.assertThat(invoice.getTotalPrice()).isEqualTo(21960);
                 }
             }
@@ -131,10 +131,10 @@ class ConvenienceStoreServiceTest {
 
                 //then
                 if (userAnswer.equals(UserAnswer.YES)) {
-                    Assertions.assertThat(invoice.getMembershipDiscount()).isEqualTo(3840);
+                    Assertions.assertThat(invoice.getMembershipDiscountAmount()).isEqualTo(3840);
                 }
                 if (userAnswer.equals(UserAnswer.NO)) {
-                    Assertions.assertThat(invoice.getMembershipDiscount()).isEqualTo(0);
+                    Assertions.assertThat(invoice.getMembershipDiscountAmount()).isEqualTo(0);
                 }
             }
         }
@@ -168,7 +168,7 @@ class ConvenienceStoreServiceTest {
                 Invoice invoice = convenienceStore.issueInvoice(confirmedProducts, UserAnswer.YES);
 
                 //then
-                int nonDiscountedPrice = invoice.getNonDiscountedPrice();
+                int nonDiscountedPrice = invoice.getOriginalPrice();
                 int membershipDiscountPrice = (int) (nonDiscountedPrice * StoreConst.MEMBERSHIP_DISCOUNT_RATE);
 
                 int totalPrice = invoice.getTotalPrice();

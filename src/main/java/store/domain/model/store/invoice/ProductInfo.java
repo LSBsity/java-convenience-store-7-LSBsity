@@ -3,22 +3,22 @@ package store.domain.model.store.invoice;
 import store.common.constant.InvoicePrintConst;
 import store.domain.model.product.Product;
 
-public class ProductPair {
+public class ProductInfo {
 
     private final Product product;
     private final int size;
 
-    private ProductPair(Product product, int size) {
+    private ProductInfo(Product product, int size) {
         this.product = product;
         this.size = size;
     }
 
-    public static ProductPair of(Product product, int size) {
-        return new ProductPair(product, size);
+    public static ProductInfo of(Product product, int size) {
+        return new ProductInfo(product, size);
     }
 
     public Product getProduct() {
-        return product;
+        return this.product;
     }
 
     public int getPrice() {
@@ -30,7 +30,7 @@ public class ProductPair {
     }
 
     public int calculateTotalPrice() {
-        return product.getPrice() * getSize();
+        return this.product.getPrice() * getSize();
     }
 
     public boolean inNotPromoted() {
@@ -45,7 +45,7 @@ public class ProductPair {
         return String.format(InvoicePrintConst.GIFT_PRODUCT, this.product.getName(), this.getSize());
     }
 
-    public boolean expired() {
+    public boolean isExpired() {
         return !this.product.isPromotionActive();
     }
 }
