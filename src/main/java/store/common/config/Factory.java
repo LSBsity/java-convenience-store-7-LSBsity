@@ -23,11 +23,11 @@ public class Factory {
     }
 
     public InputView inputView() {
-        return new InputView(inputParser(), currentProduct());
+        return new InputView(inputParser());
     }
 
     public OutputView outputView() {
-        return new OutputView(currentProduct());
+        return new OutputView();
     }
 
     public ConvenienceStoreService convenienceStore() {

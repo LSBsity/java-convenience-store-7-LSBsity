@@ -13,47 +13,48 @@ import java.util.regex.Pattern;
 
 public class RegexInputParser implements InputParser {
 
+    private static final Pattern WISH_LIST_PATTERN = Pattern.compile(StoreConst.WISH_LIST_INPUT_COMPILE_REGEX);
+
     @Override
-    public List<UserWish.Request> validateNameAndQuantity(String input, CurrentProducts products) {
-        if (!input.matches(StoreConst.WISH_LIST_INPUT_REGEX)) {                              //형식을 맞추었는가
-            throw new BusinessException(ErrorCode.WISH_PRODUCT_INPUT_FORMAT_ERROR);
-        }
+    public List<UserWish.Request> validateNameAndQuantity(String input, CurrentProducts currentProducts) {
+        if (!isValidFormat(input)) throw new BusinessException(ErrorCode.WISH_PRODUCT_INPUT_FORMAT_ERROR);
 
-        Pattern pattern = Pattern.compile(StoreConst.WISH_LIST_INPUT_COMPILE_REGEX);
-        Matcher matcher = pattern.matcher(input);
-
-        return convertUserRequestToWishList(products, matcher);
+        Matcher matcher = WISH_LIST_PATTERN.matcher(input);
+        return parseWishListFromInput(matcher, currentProducts);
     }
 
-    private static List<UserWish.Request> convertUserRequestToWishList(CurrentProducts products, Matcher matcher) {
+    private boolean isValidFormat(String input) {
+        return input.matches(StoreConst.WISH_LIST_INPUT_REGEX);
+    }
+
+    private List<UserWish.Request> parseWishListFromInput(Matcher matcher, CurrentProducts currentProducts) {
         List<UserWish.Request> wishList = new ArrayList<>();
 
         while (matcher.find()) {
-            String requestProductName = matcher.group(1);
-            int requestProductQuantity = Integer.parseInt(matcher.group(2));
+            String userRequestProductName = matcher.group(1);
+            int userRequestProductQuantity = Integer.parseInt(matcher.group(2));
 
-            parseValidateLogics(products, requestProductName, requestProductQuantity);
-
-            UserWish.Request userWishProduct = UserWish.Request.of(requestProductName, requestProductQuantity);
-            wishList.add(userWishProduct);
+            validateProductAvailability(currentProducts, userRequestProductName, userRequestProductQuantity);
+            wishList.add(UserWish.Request.of(userRequestProductName, userRequestProductQuantity));
         }
         return wishList;
     }
 
-    private static void parseValidateLogics(CurrentProducts products, String requestProductName, int requestProductQuantity) {
-        validateProductExist(products, requestProductName);                           // 존재하는가
-        validateProductInstock(products, requestProductName, requestProductQuantity); // 수량이 있는가
+    private void validateProductAvailability(CurrentProducts currentProducts, String productName, int quantity) {
+        ensureProductExists(currentProducts, productName);
+        ensureSufficientStock(currentProducts, productName, quantity);
     }
 
-    private static void validateProductExist(CurrentProducts products, String productName) {
-        products.findProductByName(productName); // throw WISH_PRODUCT_NOT_EXIST_ERROR
-    }
-
-    private static void validateProductInstock(CurrentProducts products, String requestProductName, int requestProductQuantity) {
-        int totalStockQuantity = products.getCurrentTotalStockQuantity(requestProductName);
-        if (totalStockQuantity < requestProductQuantity) {
-            throw new BusinessException(ErrorCode.WISH_PRODUCT_OUT_OF_STOCK_ERROR);
+    private void ensureProductExists(CurrentProducts products, String productName) {
+        if (products.findProductByName(productName) == null) {
+            throw new BusinessException(ErrorCode.WISH_PRODUCT_NOT_EXIST_ERROR);
         }
     }
 
+    private void ensureSufficientStock(CurrentProducts currentProducts, String productName, int requestedQuantity) {
+        int availableStock = currentProducts.getCurrentTotalStockQuantity(productName);
+        if (availableStock < requestedQuantity) {
+            throw new BusinessException(ErrorCode.WISH_PRODUCT_OUT_OF_STOCK_ERROR);
+        }
+    }
 }

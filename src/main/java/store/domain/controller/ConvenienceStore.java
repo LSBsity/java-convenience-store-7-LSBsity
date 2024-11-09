@@ -28,7 +28,7 @@ public class ConvenienceStore {
 
     public void run() {
         do {
-            List<UserWish.Request> userWishList = getUserWishList();
+            List<UserWish.Request> userWishList = getUserWishList(convenienceStoreService.getCurrentProducts());
 
             List<ConfirmedProduct> confirmedWishLists = suggestAndHandle(userWishList);
 
@@ -43,9 +43,9 @@ public class ConvenienceStore {
         writeProductFile(convenienceStoreService.getCurrentProducts());
     }
 
-    private List<UserWish.Request> getUserWishList() {
-        outputView.showStock();
-        List<UserWish.Request> userWishList = inputView.getUserWishList();
+    private List<UserWish.Request> getUserWishList(CurrentProducts currentProducts) {
+        outputView.showStock(currentProducts);
+        List<UserWish.Request> userWishList = inputView.getUserWishList(currentProducts);
         return userWishList;
     }
 

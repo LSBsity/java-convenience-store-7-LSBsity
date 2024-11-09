@@ -17,8 +17,6 @@ import store.domain.model.promotion.PromotionType;
 import store.domain.model.promotion.UserAnswer;
 import store.domain.model.store.invoice.Invoice;
 import store.domain.testunit.TestConfirmedProduct;
-import store.domain.testunit.TestOutputView;
-import store.domain.view.OutputView;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -98,8 +96,6 @@ class ConvenienceStoreServiceTest {
                     Invoice invoice = convenienceStore.issueInvoice(confirmedProducts, UserAnswer.YES);
 
                     //then
-                    OutputView outputView = new OutputView(currentProducts);
-                    outputView.showInvoice(invoice);
                     Assertions.assertThat(invoice.getPromotionDiscount()).isEqualTo(5000);
                     Assertions.assertThat(invoice.getTotalPrice()).isEqualTo(9000);
                 }

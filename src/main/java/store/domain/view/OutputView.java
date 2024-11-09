@@ -7,16 +7,10 @@ import store.domain.model.store.invoice.Invoice;
 
 public class OutputView {
 
-    private final CurrentProducts currentProducts;
-
-    public OutputView(CurrentProducts currentProducts) {
-        this.currentProducts = currentProducts;
-    }
-
-    public void showStock() {
+    public void showStock(CurrentProducts currentProducts) {
         welcome();
         printHavingProductMessage();
-        printProductStock();
+        printProductStock(currentProducts);
     }
 
     public void showInvoice(Invoice invoice) {
@@ -36,7 +30,7 @@ public class OutputView {
         System.out.println();
     }
 
-    private void printProductStock() {
+    private void printProductStock(CurrentProducts currentProducts) {
         currentProducts.getCurrentProducts()
                 .forEach((productName, products) -> products.forEach(System.out::println));
         System.out.println();
