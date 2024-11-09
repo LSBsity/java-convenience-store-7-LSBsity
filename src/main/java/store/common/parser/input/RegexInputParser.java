@@ -7,7 +7,9 @@ import store.domain.model.product.CurrentProducts;
 import store.domain.model.dto.UserWish;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,15 +31,23 @@ public class RegexInputParser implements InputParser {
 
     private List<UserWish.Request> parseWishListFromInput(Matcher matcher, CurrentProducts currentProducts) {
         List<UserWish.Request> wishList = new ArrayList<>();
+        Set<String> productNames = new HashSet<>();
 
         while (matcher.find()) {
             String userRequestProductName = matcher.group(1);
             int userRequestProductQuantity = Integer.parseInt(matcher.group(2));
 
+            validateDuplicate(productNames, userRequestProductName);
             validateProductAvailability(currentProducts, userRequestProductName, userRequestProductQuantity);
             wishList.add(UserWish.Request.of(userRequestProductName, userRequestProductQuantity));
         }
         return wishList;
+    }
+
+    private void validateDuplicate(Set<String> productNames, String userRequestProductName) {
+        if (!productNames.add(userRequestProductName)) {
+            throw new BusinessException(ErrorCode.WISH_PRODUCT_INPUT_ERROR);
+        }
     }
 
     private void validateProductAvailability(CurrentProducts currentProducts, String productName, int quantity) {
