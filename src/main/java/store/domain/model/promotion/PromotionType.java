@@ -28,7 +28,7 @@ public enum PromotionType {
         return exp.apply(buy, get);
     }
 
-    public static PromotionType getMatchedPromotionType(int buy, int get) {
+    public static PromotionType getMatchedPromotionType(final int buy, final int get) {
         return Stream.of(PromotionType.values())
                 .filter(type -> type.matchType(buy, get))
                 .findFirst()

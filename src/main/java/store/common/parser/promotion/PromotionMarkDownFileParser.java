@@ -17,7 +17,7 @@ import java.util.List;
 public class PromotionMarkDownFileParser implements PromotionParser {
 
     @Override
-    public CurrentPromotions parsePromotions(String filePath) {
+    public CurrentPromotions parsePromotions(final String filePath) {
         List<Promotion> promotions = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -36,7 +36,7 @@ public class PromotionMarkDownFileParser implements PromotionParser {
         return CurrentPromotions.create(promotions);
     }
 
-    private static Promotion parseLine(String line) {
+    private static Promotion parseLine(final String line) {
         String[] fields = line.split(StoreConst.FILE_PARSE_DELIMETER);
 
         if (fields.length != StoreConst.PROMOTION_COLUMN_SIZE) {

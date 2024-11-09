@@ -27,18 +27,18 @@ public class StoreManager {
         return this.currentProducts;
     }
 
-    public Invoice issueInvoice(List<ConfirmedProduct> confirmedProducts, UserAnswer isMemberShip) {
+    public Invoice issueInvoice(final List<ConfirmedProduct> confirmedProducts,final  UserAnswer isMemberShip) {
         Invoice invoice = Invoice.issue(confirmedProducts);
 
         invoice.takeSummary(isMemberShip);
         return invoice;
     }
 
-    public void updateStock(List<ConfirmedProduct> confirmedProduct) {
+    public void updateStock(final List<ConfirmedProduct> confirmedProduct) {
         confirmedProduct.forEach(stockService::updateStock);
     }
 
-    public void suggestHandle(List<ConfirmedProduct> confirmedProducts) {
+    public void suggestHandle(final List<ConfirmedProduct> confirmedProducts) {
         confirmedProducts.forEach(suggestionService::adjustUserRequestQuantity);
     }
 
@@ -46,7 +46,7 @@ public class StoreManager {
         return this.currentProducts.hasAvailableStock();
     }
 
-    public List<StoreSuggestion> suggest(List<UserWish.Request> userWishList) {
+    public List<StoreSuggestion> suggest(final List<UserWish.Request> userWishList) {
         List<StoreSuggestion> suggestions = userWishList.stream()
                 .map(this::createSuggestion)
                 .collect(Collectors.toList());
@@ -55,7 +55,7 @@ public class StoreManager {
         return suggestions;
     }
 
-    private StoreSuggestion createSuggestion(UserWish.Request request) {
+    private StoreSuggestion createSuggestion(final UserWish.Request request) {
         String requestProductName = request.getProductName();
         int requestQuantity = request.getQuantity();
 

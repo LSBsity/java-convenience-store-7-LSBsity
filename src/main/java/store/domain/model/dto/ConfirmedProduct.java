@@ -75,7 +75,7 @@ public class ConfirmedProduct {
         this.storeSuggestion.addUserRequestSize();
     }
 
-    public void changeUserRequestSize(int size) {
+    public void changeUserRequestSize(final int size) {
         this.storeSuggestion.changeUserRequestSize(size);
     }
 }

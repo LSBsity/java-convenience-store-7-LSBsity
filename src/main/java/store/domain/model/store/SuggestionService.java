@@ -6,17 +6,17 @@ import java.util.List;
 
 public class SuggestionService {
 
-    public void adjustUserRequestQuantity(ConfirmedProduct confirmedProduct) {
+    public void adjustUserRequestQuantity(final ConfirmedProduct confirmedProduct) {
         SuggestionType suggestion = confirmedProduct.getSuggestionType();
 
         suggestion.adjustRequestSizeByAnswer(confirmedProduct);
     }
 
-    public void suggest(List<StoreSuggestion> defaultSuggestion) {
+    public void suggest(final List<StoreSuggestion> defaultSuggestion) {
         defaultSuggestion.forEach(this::applySuggestion);
     }
 
-    private void applySuggestion(StoreSuggestion suggestion) {
+    private void applySuggestion(final StoreSuggestion suggestion) {
         if (isEligibleForAdditionalPurchase(suggestion)) {
             applyAdditionalPurchaseOffer(suggestion);
         }
@@ -28,7 +28,7 @@ public class SuggestionService {
         }
     }
 
-    private static boolean isEligibleForAdditionalPurchase(StoreSuggestion suggestion) {
+    private static boolean isEligibleForAdditionalPurchase(final StoreSuggestion suggestion) {
         if (isNotApplicable(suggestion)) return false;
 
         int promotionAvailableStockQuantity = suggestion.getPromotionAvailableStockQuantity();
@@ -43,16 +43,17 @@ public class SuggestionService {
         return isEligibleButNotCorrectQuantity(remainder, promotionDefaultSize, promotionAvailableStockQuantity, requestSize);
     }
 
-    private static boolean isEligibleButNotCorrectQuantity(int remainder, int promotionDefaultSize, int stock, int requestSize) {
+    private static boolean isEligibleButNotCorrectQuantity(final int remainder, final int promotionDefaultSize,
+                                                           final int stock, final int requestSize) {
         return remainder == promotionDefaultSize - 1 && stock >= requestSize + 1;
     }
 
-    private static void applyAdditionalPurchaseOffer(StoreSuggestion suggestion) {
+    private static void applyAdditionalPurchaseOffer(final StoreSuggestion suggestion) {
         suggestion.changeSuggestion(SuggestionType.ADDITIONAL_FREE_PRODUCT);
         suggestion.changeOfferSize(1);
     }
 
-    private static boolean isInsufficientPromotionStock(StoreSuggestion suggestion) {
+    private static boolean isInsufficientPromotionStock(final StoreSuggestion suggestion) {
         if (isNotApplicable(suggestion)) return false;
 
         int promotionAvailableStockQuantity = suggestion.getPromotionAvailableStockQuantity(); // 행사 재고
@@ -73,18 +74,20 @@ public class SuggestionService {
         return false;
     }
 
-    private static int calculateQuantityForAskUserNotAppliedPromotion(int promotionAvailableStockQuantity, int promotionDefaultSize, int requestSize) {
+    private static int calculateQuantityForAskUserNotAppliedPromotion(final int promotionAvailableStockQuantity,
+                                                                      final int promotionDefaultSize,
+                                                                      final int requestSize) {
         int noAvailablePromotionRemainder = promotionAvailableStockQuantity % promotionDefaultSize;
         int availablePromotionQuantity = promotionAvailableStockQuantity - noAvailablePromotionRemainder;
         int forAskUserToBuyQuantity = requestSize - availablePromotionQuantity;
         return forAskUserToBuyQuantity;
     }
 
-    private static void applyInsufficientPromotionStockOffer(StoreSuggestion suggestion) {
+    private static void applyInsufficientPromotionStockOffer(final StoreSuggestion suggestion) {
         suggestion.changeSuggestion(SuggestionType.INSUFFICIENT_PROMOTION_STOCK);
     }
 
-    private static boolean isExcessiveAdditionalPurchase(StoreSuggestion suggestion) {
+    private static boolean isExcessiveAdditionalPurchase(final StoreSuggestion suggestion) {
         if (isNotApplicable(suggestion)) return false;
 
         int promotionDefaultQuantity = suggestion.getPromotionDefaultQuantity();
@@ -92,12 +95,12 @@ public class SuggestionService {
         return userRequestSize % promotionDefaultQuantity == 1 && promotionDefaultQuantity == 3; // 2+1인데 1개, 4개, 7개와 같이 애매하게 들고오는 경우
     }
 
-    private static void applyExcessiveAdditionalPurchaseOffer(StoreSuggestion suggestion) {
+    private static void applyExcessiveAdditionalPurchaseOffer(final StoreSuggestion suggestion) {
         suggestion.changeOfferSize(1);
         suggestion.changeSuggestion(SuggestionType.EXCESSIVE_ADDITIONAL_PURCHASE);
     }
 
-    private static boolean isNotApplicable(StoreSuggestion suggestion) {
+    private static boolean isNotApplicable(final StoreSuggestion suggestion) {
         return suggestion.isAlreadySuggested() || !suggestion.isPromoted();
     }
 }

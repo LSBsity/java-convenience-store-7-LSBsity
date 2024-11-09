@@ -17,7 +17,7 @@ import java.util.List;
 public class ProductMarkDownFileParser implements ProductParser {
 
     @Override
-    public CurrentProducts parseProducts(String filePath, CurrentPromotions currentPromotions) {
+    public CurrentProducts parseProducts(final String filePath, final CurrentPromotions currentPromotions) {
         List<Product> products = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -36,7 +36,7 @@ public class ProductMarkDownFileParser implements ProductParser {
         return CurrentProducts.create(products);
     }
 
-    private static Product parseLine(String line, CurrentPromotions currentPromotions) {
+    private static Product parseLine(final String line, final CurrentPromotions currentPromotions) {
         String[] fields = line.split(StoreConst.FILE_PARSE_DELIMETER);
 
         if (fields.length != StoreConst.PRODUCT_COLUMN_SIZE) {
@@ -50,7 +50,7 @@ public class ProductMarkDownFileParser implements ProductParser {
         }
     }
 
-    private static Product parseEachField(CurrentPromotions currentPromotions, String[] fields) {
+    private static Product parseEachField(final CurrentPromotions currentPromotions, final String[] fields) {
         String name = fields[0];
         int price = Integer.parseInt(fields[1]);
         int quantity = Integer.parseInt(fields[2]);

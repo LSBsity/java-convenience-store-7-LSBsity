@@ -7,7 +7,7 @@ import store.domain.model.store.invoice.Invoice;
 
 public class OutputView {
 
-    public void showStock(CurrentProducts currentProducts) {
+    public void showStock(final CurrentProducts currentProducts) {
         welcome();
         printHavingProductMessage();
         printProductStock(currentProducts);
@@ -30,13 +30,13 @@ public class OutputView {
         System.out.println();
     }
 
-    private void printProductStock(CurrentProducts currentProducts) {
+    private void printProductStock(final CurrentProducts currentProducts) {
         currentProducts.getCurrentProducts()
                 .forEach((productName, products) -> products.forEach(System.out::println));
         System.out.println();
     }
 
-    private static void printSummary(Invoice invoice) {
+    private static void printSummary(final Invoice invoice) {
         System.out.println(invoice.printSummary());
     }
 
@@ -48,12 +48,12 @@ public class OutputView {
         System.out.println(InvoicePrintConst.PRINT_SEPARATOR);
     }
 
-    private static void printGiftProduct(Invoice invoice) {
+    private static void printGiftProduct(final Invoice invoice) {
         System.out.println(InvoicePrintConst.PRINT_GIFT_TITLE);
         System.out.print(invoice.printGifts());
     }
 
-    private static void printPurchasedProduct(Invoice invoice) {
+    private static void printPurchasedProduct(final Invoice invoice) {
         System.out.println(InvoicePrintConst.PRINT_NAME_QUANTITY_PRICE);
         System.out.print(invoice.printPurchasedProduct());
     }

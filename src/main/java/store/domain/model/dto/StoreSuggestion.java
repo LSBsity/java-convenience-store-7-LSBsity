@@ -36,7 +36,7 @@ public class StoreSuggestion {
         return this.offerSize;
     }
 
-    public void changeUserRequestSize(int userRequestSize) {
+    public void changeUserRequestSize(final int userRequestSize) {
         this.userRequestSize = userRequestSize;
     }
 
@@ -54,11 +54,11 @@ public class StoreSuggestion {
         return products.stream().anyMatch(Product::isPromotionActive);
     }
 
-    public void changeSuggestion(SuggestionType suggestion) {
+    public void changeSuggestion(final SuggestionType suggestion) {
         this.suggestion = suggestion;
     }
 
-    public void changeOfferSize(int offerSize) {
+    public void changeOfferSize(final int offerSize) {
         this.offerSize = offerSize;
     }
 
@@ -100,7 +100,7 @@ public class StoreSuggestion {
                 .sum();
     }
 
-    public void decreasePromotionStock(int size) {
+    public void decreasePromotionStock(final int size) {
         Product promotionProduct = getPromotionProduct();
         promotionProduct.decreaseQuantity(size);
     }
@@ -121,15 +121,5 @@ public class StoreSuggestion {
     public void decreaseAllNormalStock() {
         Product defaultProduct = getDefaultProduct();
         defaultProduct.decreaseAll();
-    }
-
-    public int getMaxAvailableQuantity() {
-        int defaultSize = getPromotionDefaultQuantity();
-        int max = getPromotionAvailableStockQuantity() / defaultSize;
-        return max * defaultSize;
-    }
-
-    public int getShouldDecreaseQuantity() {
-        return getUserRequestSize() - getMaxAvailableQuantity();
     }
 }

@@ -20,7 +20,7 @@ public class InputView {
         this.inputParser = inputParser;
     }
 
-    private <T> T readInputAndHandleErrors(InputSupplier<T> supplier) {
+    private <T> T readInputAndHandleErrors(final InputSupplier<T> supplier) {
         while (true) {
             try {
                 return supplier.get();
@@ -30,7 +30,7 @@ public class InputView {
         }
     }
 
-    public List<UserWish.Request> getUserWishList(CurrentProducts currentProducts) {
+    public List<UserWish.Request> getUserWishList(final CurrentProducts currentProducts) {
         System.out.println(StoreConst.NAME_QUANTITY_REQ_MSG);
 
         return readInputAndHandleErrors(() -> {
@@ -56,7 +56,7 @@ public class InputView {
         return validateUserAnswerInput(userInput);
     }
 
-    private static UserAnswer validateUserAnswerInput(String input) {
+    private static UserAnswer validateUserAnswerInput(final String input) {
         if (input.equals(StoreConst.YES)) {
             return UserAnswer.YES;
         }
@@ -67,19 +67,19 @@ public class InputView {
         throw new BusinessException(ErrorCode.USER_CONFIRM_INPUT_ERROR);
     }
 
-    public List<ConfirmedProduct> showSuggestions(List<StoreSuggestion> storeSuggestions) {
+    public List<ConfirmedProduct> showSuggestions(final List<StoreSuggestion> storeSuggestions) {
         return storeSuggestions.stream()
                 .map(this::suggestToUserAndTakeConfirm)
                 .collect(Collectors.toList());
     }
 
-    private ConfirmedProduct suggestToUserAndTakeConfirm(StoreSuggestion storeSuggestion) {
+    private ConfirmedProduct suggestToUserAndTakeConfirm(final StoreSuggestion storeSuggestion) {
         UserAnswer userAnswer = printSuggestionAndGetConfirmation(storeSuggestion);
 
         return ConfirmedProduct.of(storeSuggestion, userAnswer);
     }
 
-    private UserAnswer printSuggestionAndGetConfirmation(StoreSuggestion storeSuggestion) {
+    private UserAnswer printSuggestionAndGetConfirmation(final StoreSuggestion storeSuggestion) {
         SuggestionType suggestion = storeSuggestion.getSuggestionType();
         if (!suggestion.isShouldPrint()) return UserAnswer.NO;
 

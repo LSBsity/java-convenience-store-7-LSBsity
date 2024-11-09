@@ -7,14 +7,14 @@ public enum SuggestionType {
 
     ADDITIONAL_FREE_PRODUCT(StoreConst.ADDITIONAL_FREE_PRODUCT_MSG, true) {
         @Override
-        public void adjustRequestSizeByAnswer(ConfirmedProduct confirmedProduct) {
+        public void adjustRequestSizeByAnswer(final ConfirmedProduct confirmedProduct) {
             if (confirmedProduct.getUserAnswer() == UserAnswer.YES) {
                 confirmedProduct.increaseUserRequestSize(); // 1+1, 2+1 적용
             }
         }
 
         @Override
-        public void updateStock(ConfirmedProduct confirmedProduct) {
+        public void updateStock(final ConfirmedProduct confirmedProduct) {
             StoreSuggestion storeSuggestion = confirmedProduct.getStoreSuggestion();
 
             storeSuggestion.decreasePromotionStock(storeSuggestion.getUserRequestSize());
@@ -22,7 +22,7 @@ public enum SuggestionType {
     },
     INSUFFICIENT_PROMOTION_STOCK(StoreConst.INSUFFICIENT_PROMOTION_STOCK_MSG, true) {
         @Override
-        public void adjustRequestSizeByAnswer(ConfirmedProduct confirmedProduct) {
+        public void adjustRequestSizeByAnswer(final ConfirmedProduct confirmedProduct) {
             if (confirmedProduct.getUserAnswer() == UserAnswer.NO) {
                 int nonDiscountableQuantity = confirmedProduct.getOfferSize();
                 int discountableQuantity = confirmedProduct.getUserRequestSize() - nonDiscountableQuantity;
@@ -32,7 +32,7 @@ public enum SuggestionType {
         }
 
         @Override
-        public void updateStock(ConfirmedProduct confirmedProduct) {
+        public void updateStock(final ConfirmedProduct confirmedProduct) {
             StoreSuggestion storeSuggestion = confirmedProduct.getStoreSuggestion();
             UserAnswer userAnswer = confirmedProduct.getUserAnswer();
 
@@ -52,7 +52,7 @@ public enum SuggestionType {
     },
     EXCESSIVE_ADDITIONAL_PURCHASE(StoreConst.EXCESSIVE_ADDITIONAL_PURCHASE_MSG, true) {
         @Override
-        public void adjustRequestSizeByAnswer(ConfirmedProduct confirmedProduct) {
+        public void adjustRequestSizeByAnswer(final ConfirmedProduct confirmedProduct) {
             if (confirmedProduct.getUserAnswer() == UserAnswer.NO) {
                 int discountableQuantity = confirmedProduct.getUserRequestSize() - 1;
                 confirmedProduct.changeUserRequestSize(discountableQuantity);
@@ -60,7 +60,7 @@ public enum SuggestionType {
         }
 
         @Override
-        public void updateStock(ConfirmedProduct confirmedProduct) {
+        public void updateStock(final ConfirmedProduct confirmedProduct) {
             StoreSuggestion storeSuggestion = confirmedProduct.getStoreSuggestion();
             UserAnswer userAnswer = confirmedProduct.getUserAnswer();
 
@@ -74,24 +74,24 @@ public enum SuggestionType {
     },
     ALREADY_ELIGIBLE(StoreConst.EMPTY_MSG, false) {
         @Override
-        public void adjustRequestSizeByAnswer(ConfirmedProduct confirmedProduct) {
+        public void adjustRequestSizeByAnswer(final ConfirmedProduct confirmedProduct) {
             return;
         }
 
         @Override
-        public void updateStock(ConfirmedProduct confirmedProduct) {
+        public void updateStock(final ConfirmedProduct confirmedProduct) {
             StoreSuggestion storeSuggestion = confirmedProduct.getStoreSuggestion();
             storeSuggestion.decreasePromotionStock(storeSuggestion.getUserRequestSize());
         }
     },
     NONE(StoreConst.EMPTY_MSG, false) {
         @Override
-        public void adjustRequestSizeByAnswer(ConfirmedProduct confirmedProduct) {
+        public void adjustRequestSizeByAnswer(final ConfirmedProduct confirmedProduct) {
             return;
         }
 
         @Override
-        public void updateStock(ConfirmedProduct confirmedProduct) {
+        public void updateStock(final ConfirmedProduct confirmedProduct) {
             StoreSuggestion storeSuggestion = confirmedProduct.getStoreSuggestion();
 
             int userRequestSize = storeSuggestion.getUserRequestSize();

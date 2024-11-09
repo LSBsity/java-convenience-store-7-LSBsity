@@ -7,11 +7,11 @@ public class CurrentPromotions {
 
     private final List<Promotion> currentPromotions;
 
-    private CurrentPromotions(List<Promotion> currentPromotions) {
+    private CurrentPromotions(final List<Promotion> currentPromotions) {
         this.currentPromotions = currentPromotions;
     }
 
-    public static CurrentPromotions create(List<Promotion> currentPromotions) {
+    public static CurrentPromotions create(final List<Promotion> currentPromotions) {
         return new CurrentPromotions(currentPromotions);
     }
 
@@ -23,7 +23,7 @@ public class CurrentPromotions {
         return Collections.unmodifiableList(this.currentPromotions);
     }
 
-    public Promotion findPromotionByName(String name) {
+    public Promotion findPromotionByName(final String name) {
         return currentPromotions.stream()
                 .filter(promotion -> promotion.getPromotionName().equals(name))
                 .findFirst()

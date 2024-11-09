@@ -25,7 +25,7 @@ public class Invoice {
         this.giftProducts = giftProducts;
     }
 
-    public static Invoice issue(List<ConfirmedProduct> confirmedProducts) {
+    public static Invoice issue(final List<ConfirmedProduct> confirmedProducts) {
         List<ProductInfo> purchasedProducts = new ArrayList<>();
         List<ProductInfo> giftProducts = new ArrayList<>();
 
@@ -37,7 +37,7 @@ public class Invoice {
         return new Invoice(purchasedProducts, giftProducts);
     }
 
-    private static void addNormalProduct(ConfirmedProduct confirmedWishList, List<ProductInfo> purchasedProducts) {
+    private static void addNormalProduct(final ConfirmedProduct confirmedWishList, final List<ProductInfo> purchasedProducts) {
         int userRequestSize = confirmedWishList.getUserRequestSize();
         if (userRequestSize == 0) return;
 
@@ -47,7 +47,7 @@ public class Invoice {
         purchasedProducts.add(product);
     }
 
-    private static void addGiftProduct(ConfirmedProduct confirmedWishList, List<ProductInfo> giftProducts) {
+    private static void addGiftProduct(final ConfirmedProduct confirmedWishList, final List<ProductInfo> giftProducts) {
         if (!confirmedWishList.isAvailablePromotion()) return;
 
         int userGiftQuantity = getGiftProductQuantity(confirmedWishList);
@@ -59,7 +59,7 @@ public class Invoice {
         giftProducts.add(product);
     }
 
-    private static int getGiftProductQuantity(ConfirmedProduct confirmedWishList) {
+    private static int getGiftProductQuantity(final ConfirmedProduct confirmedWishList) {
         int promotionStock = confirmedWishList.getPromotionStock();
         int userRequestSize = confirmedWishList.getUserRequestSize();
         int promotionDefaultQuantity = confirmedWishList.getPromotionDefaultQuantity();
@@ -102,7 +102,7 @@ public class Invoice {
         return totalPrice;
     }
 
-    public void takeSummary(UserAnswer isMemberShip) {
+    public void takeSummary(final UserAnswer isMemberShip) {
         int nondiscountedPrice = calculateNonDiscountedPrice();
         int totalGiftPrice = calculateTotalGiftPrice();
         setOriginalPrice(nondiscountedPrice);
@@ -111,7 +111,7 @@ public class Invoice {
         setTotalPrice(nondiscountedPrice - promotionDiscountAmount - membershipDiscountAmount);
     }
 
-    private void setMembershipDiscountIfAnswered(UserAnswer isMemberShip) {
+    private void setMembershipDiscountIfAnswered(final UserAnswer isMemberShip) {
         if (isMemberShip == UserAnswer.YES) {
             int membershipDiscountPrice = calculateMembershipDiscount();
             setMembershipDiscountAmount(membershipDiscountPrice);

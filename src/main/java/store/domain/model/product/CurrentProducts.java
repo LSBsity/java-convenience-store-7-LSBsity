@@ -15,7 +15,7 @@ public class CurrentProducts {
         this.currentProducts = currentProducts;
     }
 
-    public static CurrentProducts create(List<Product> productList) {
+    public static CurrentProducts create(final List<Product> productList) {
         Map<String, List<Product>> productMap = productList.stream()
                 .collect(Collectors.groupingBy(
                         Product::getName,
@@ -30,7 +30,7 @@ public class CurrentProducts {
     /**
      * Products.md에 프로모션 물품만 있고 프로모션 미적용 물품이 없다면 이름과 가격을 카피해서 ProductMap에 추가함
      */
-    private static void addDefaultProductIfOnlyPromotedExists(Map<String, List<Product>> productMap) {
+    private static void addDefaultProductIfOnlyPromotedExists(final Map<String, List<Product>> productMap) {
         for (String productName : productMap.keySet()) {
             List<Product> products = productMap.get(productName);
             Product first = products.getFirst();
@@ -41,7 +41,7 @@ public class CurrentProducts {
         }
     }
 
-    public List<Product> findProductByName(String name) {
+    public List<Product> findProductByName(final String name) {
         if (isNotExistProduct(name)) {
             throw new BusinessException(ErrorCode.WISH_PRODUCT_NOT_EXIST_ERROR);
         }
@@ -52,12 +52,12 @@ public class CurrentProducts {
         return Collections.unmodifiableMap(this.currentProducts);
     }
 
-    public boolean isNotExistProduct(String name) {
+    public boolean isNotExistProduct(final String name) {
         return this.currentProducts
                 .containsKey(name) == false;
     }
 
-    public int getCurrentTotalStockQuantity(String name) {
+    public int getCurrentTotalStockQuantity(final String name) {
         return this.currentProducts.get(name)
                 .stream()
                 .mapToInt(Product::getCurrentQuantity)
@@ -69,7 +69,7 @@ public class CurrentProducts {
                 .anyMatch(key -> hasAtLeastOneStock(key, getCurrentProducts()));
     }
 
-    private boolean hasAtLeastOneStock(String key, Map<String, List<Product>> currentProductsMap) {
+    private boolean hasAtLeastOneStock(final String key, final Map<String, List<Product>> currentProductsMap) {
         return currentProductsMap.get(key)
                 .stream()
                 .anyMatch(product -> product.getCurrentQuantity() != 0);

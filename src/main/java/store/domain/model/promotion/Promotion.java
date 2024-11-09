@@ -13,7 +13,6 @@ public class Promotion {
     private final LocalDate endDate;            // end
 
     private Promotion(String promotionName, PromotionType promotionType, LocalDate startDate, LocalDate endDate) {
-        // null 체크
         validate(promotionName, promotionType, startDate, endDate);
         this.promotionName = promotionName;
         this.promotionType = promotionType;
@@ -39,7 +38,7 @@ public class Promotion {
         return !this.promotionType.equals(PromotionType.NONE);
     }
 
-    public boolean isAvailable(LocalDate currentDate) {
+    public boolean isAvailable(final LocalDate currentDate) {
         return !currentDate.isBefore(startDate) && !currentDate.isAfter(endDate) && promotionType != PromotionType.NONE;
     }
 

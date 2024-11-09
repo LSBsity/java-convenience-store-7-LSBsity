@@ -41,13 +41,13 @@ public class ConvenienceStore {
         writeProductFile(storeManager.getCurrentProducts());
     }
 
-    private List<UserWish.Request> getUserWishList(CurrentProducts currentProducts) {
+    private List<UserWish.Request> getUserWishList(final CurrentProducts currentProducts) {
         outputView.showStock(currentProducts);
         List<UserWish.Request> userWishList = inputView.getUserWishList(currentProducts);
         return userWishList;
     }
 
-    private List<ConfirmedProduct> suggestAndHandle(List<UserWish.Request> userWishList) {
+    private List<ConfirmedProduct> suggestAndHandle(final List<UserWish.Request> userWishList) {
         List<StoreSuggestion> storeSuggestions = storeManager.suggest(userWishList);
 
         List<ConfirmedProduct> confirmedWishLists = inputView.showSuggestions(storeSuggestions);
@@ -55,7 +55,7 @@ public class ConvenienceStore {
         return confirmedWishLists;
     }
 
-    private static void writeProductFile(CurrentProducts currentProducts) {
+    private static void writeProductFile(final CurrentProducts currentProducts) {
 //        ProductWriter.writeProductsToFile(currentProducts, StoreConst.PRODUCTS_FILE_PATH);
     }
 
