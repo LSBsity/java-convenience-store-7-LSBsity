@@ -1,5 +1,7 @@
 package store.domain.controller;
 
+import store.common.constant.StoreConst;
+import store.common.writer.ProductWriter;
 import store.domain.model.dto.ConfirmedProduct;
 import store.domain.model.dto.StoreSuggestion;
 import store.domain.model.dto.UserWish;
@@ -37,7 +39,7 @@ public class ConvenienceStore {
 
             outputView.showInvoice(invoice);
         } while (convenienceStoreService.isNotEmpty() && inputView.tryAgain() == UserAnswer.YES);
-        
+
         writeProductFile(convenienceStoreService.getCurrentProducts());
     }
 
@@ -55,8 +57,7 @@ public class ConvenienceStore {
     }
 
     private static void writeProductFile(CurrentProducts currentProducts) {
-//        ProductWriter.writeProductsToFile(currentProducts, StoreConst.PRODUCTS_FILE_PATH);
+        ProductWriter.writeProductsToFile(currentProducts, StoreConst.PRODUCTS_FILE_PATH);
     }
-
 
 }
