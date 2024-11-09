@@ -1,21 +1,34 @@
 package store.domain.model.dto;
 
 import store.domain.model.product.Product;
+import store.domain.model.promotion.UserAnswer;
 
-import java.util.List;
 
 public class ConfirmedProduct {
 
-    private final List<Product> products;
-    private final int userRequestSize;
+    private final StoreSuggestion storeSuggestion;
+    private final UserAnswer userAnswer;
 
-    private ConfirmedProduct(List<Product> products, int userRequestSize) {
-        this.products = products;
-        this.userRequestSize = userRequestSize;
+
+    public ConfirmedProduct(StoreSuggestion storeSuggestion, UserAnswer userAnswer) {
+        this.storeSuggestion = storeSuggestion;
+        this.userAnswer = userAnswer;
     }
 
-    public static ConfirmedProduct of(List<Product> products, int userRequestSize) {
-        return new ConfirmedProduct(products, userRequestSize);
+    public static ConfirmedProduct of(StoreSuggestion storeSuggestion, UserAnswer userAnswer) {
+        return new ConfirmedProduct(storeSuggestion, userAnswer);
+    }
+
+    public StoreSuggestion getStoreSuggestion() {
+        return storeSuggestion;
+    }
+
+    public Suggestion getSuggestion() {
+        return this.storeSuggestion.getSuggestion();
+    }
+
+    public UserAnswer getUserAnswer() {
+        return userAnswer;
     }
 
     public boolean isPromotionActive() {
@@ -23,19 +36,23 @@ public class ConfirmedProduct {
     }
 
     public int getPromotionStock() {
-        return products.stream()
+        return storeSuggestion.getProducts().stream()
                 .filter(Product::isPromotionActive)
                 .mapToInt(Product::getCurrentQuantity)
                 .sum();
     }
 
     public int getUserRequestSize() {
-        return userRequestSize;
+        return storeSuggestion.getUserRequestSize();
     }
 
     public boolean isPromoted() {
-        return products.stream()
+        return storeSuggestion.getProducts().stream()
                 .anyMatch(Product::isPromotedProduct);
+    }
+
+    public Product getPromotionProduct() {
+        return storeSuggestion.getProducts().stream().filter(Product::isPromotedProduct).findFirst().get();
     }
 
     public boolean isAvailablePromotion() {
@@ -43,10 +60,22 @@ public class ConfirmedProduct {
     }
 
     public Product getProduct() {
-        return this.products.getFirst();
+        return this.storeSuggestion.getProducts().getFirst();
+    }
+
+    public int getOfferSize() {
+        return this.storeSuggestion.getOfferSize();
     }
 
     public int getPromotionDefaultQuantity() {
-        return this.products.getFirst().getPromotionDefaultQuantity();
+        return this.storeSuggestion.getProducts().getFirst().getPromotionDefaultQuantity();
+    }
+
+    public void addUserRequestSize() {
+        this.storeSuggestion.addUserRequestSize();
+    }
+
+    public void changeUserRequestSize(int size) {
+        this.storeSuggestion.changeUserRequestSize(size);
     }
 }

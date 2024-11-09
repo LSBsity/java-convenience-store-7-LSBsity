@@ -1,5 +1,6 @@
-package store.domain.model.store;
+package store.domain.model.store.invoice;
 
+import store.common.constant.InvoicePrintConst;
 import store.domain.model.product.Product;
 
 public class ProductPair {
@@ -7,9 +8,13 @@ public class ProductPair {
     private final Product product;
     private final int size;
 
-    public ProductPair(Product product, int size) {
+    private ProductPair(Product product, int size) {
         this.product = product;
         this.size = size;
+    }
+
+    public static ProductPair of(Product product, int size) {
+        return new ProductPair(product, size);
     }
 
     public Product getProduct() {
@@ -33,10 +38,14 @@ public class ProductPair {
     }
 
     public String printPurchased() {
-        return String.format("%-5s\t\t\t%2d\t\t%-,5d\n", this.product.getName(), this.getSize(), this.calculateTotalPrice());
+        return String.format(InvoicePrintConst.PURCHASED_PRODUCT, this.product.getName(), this.getSize(), this.calculateTotalPrice());
     }
 
     public String printGift() {
-        return String.format("%-5s\t\t\t%-5d\n", this.product.getName(), this.getSize());
+        return String.format(InvoicePrintConst.GIFT_PRODUCT, this.product.getName(), this.getSize());
+    }
+
+    public boolean expired() {
+        return !this.product.isPromotionActive();
     }
 }

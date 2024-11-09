@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 public class CurrentProducts {
 
-    // Map<ProductName, List<Product>>
     private final Map<String, List<Product>> currentProducts;
 
     private CurrentProducts(Map<String, List<Product>> currentProducts) {

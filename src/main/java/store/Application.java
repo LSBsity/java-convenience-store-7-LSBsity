@@ -1,13 +1,13 @@
 package store;
 
 import store.common.config.Factory;
-import store.domain.controller.StoreController;
+import store.domain.controller.ConvenienceStore;
 
 public class Application {
     public static void main(String[] args) {
         Factory factory = new Factory();
 
-        StoreController storeController = factory.storeController();
+        ConvenienceStore storeController = factory.storeController();
         storeController.run();
     }
 }

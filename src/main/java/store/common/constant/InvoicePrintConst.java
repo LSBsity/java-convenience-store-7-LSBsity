@@ -20,4 +20,7 @@ public class InvoicePrintConst {
     public static final String TOTAL_PRICE = "%-3s\t\t\t\t\t%,6d\n";
     public static final String TOTAL_PRICE_NAME = "내실돈";
 
+
+    public static final String PURCHASED_PRODUCT = "%-5s\t\t\t%2d\t\t%-,5d\n";
+    public static final String GIFT_PRODUCT = "%-5s\t\t\t%-5d\n";
 }

@@ -7,43 +7,47 @@ import store.common.parser.product.ProductMarkDownFileParser;
 import store.common.parser.product.ProductParser;
 import store.common.parser.promotion.PromotionMarkDownFileParser;
 import store.common.parser.promotion.PromotionParser;
-import store.domain.controller.StoreController;
+import store.domain.controller.ConvenienceStore;
 import store.domain.model.product.CurrentProducts;
 import store.domain.model.promotion.CurrentPromotions;
-import store.domain.model.store.ConvenienceStore;
-import store.domain.model.store.InvoiceService;
-import store.domain.model.store.PromotionService;
+import store.domain.model.store.*;
 import store.domain.view.InputView;
 import store.domain.view.OutputView;
 
 public class Factory {
 
-    public StoreController storeController() {
-        return new StoreController(convenienceStore(), inputView(), outputView());
+    private static CurrentProducts currentProducts;
+
+    public ConvenienceStore storeController() {
+        return new ConvenienceStore(convenienceStore(), inputView(), outputView());
     }
 
     public InputView inputView() {
-        return new InputView(inputParser());
+        return new InputView(inputParser(), currentProduct());
     }
 
     public OutputView outputView() {
-        return new OutputView();
+        return new OutputView(currentProduct());
     }
 
-    public ConvenienceStore convenienceStore() {
-        return new ConvenienceStore(currentProducts());
+    public ConvenienceStoreService convenienceStore() {
+        return new ConvenienceStoreService(currentProduct(), suggestionService(), stockService());
     }
 
-    public PromotionService promotionService() {
-        return new PromotionService();
+    public SuggestionService suggestionService() {
+        return new SuggestionService();
     }
 
-    public InvoiceService invoiceService() {
-        return new InvoiceService();
+    public StockService stockService() {
+        return new StockService();
     }
 
-    public CurrentProducts currentProducts() {
-        return productParser().parseProducts(StoreConst.PRODUCTS_FILE_PATH, currentPromotions());
+
+    private CurrentProducts currentProduct() {
+        if (currentProducts == null) {
+            currentProducts = productParser().parseProducts(StoreConst.PRODUCTS_FILE_PATH, currentPromotions());
+        }
+        return currentProducts;
     }
 
     public CurrentPromotions currentPromotions() {

@@ -15,11 +15,14 @@ public class StoreSuggestion {
     private Suggestion suggestion = Suggestion.NONE;
     private int offerSize = 0;
 
-    public StoreSuggestion(List<Product> products, int requestSize) {
+    private StoreSuggestion(List<Product> products, int requestSize) {
         this.products = products;
         this.userRequestSize = requestSize;
     }
 
+    public static StoreSuggestion of(List<Product> products, int userRequestSize) {
+        return new StoreSuggestion(products, userRequestSize);
+    }
 
     public int getUserRequestSize() {
         return userRequestSize;
@@ -45,6 +48,10 @@ public class StoreSuggestion {
         return products.stream()
                 .anyMatch(Product::isPromotedProduct) && products.stream()
                 .anyMatch(Product::isPromotionActive);
+    }
+
+    public boolean isActive() {
+        return products.stream().anyMatch(Product::isPromotionActive);
     }
 
     public void changeSuggestion(Suggestion suggestion) {
@@ -84,5 +91,45 @@ public class StoreSuggestion {
 
     public List<Product> getProducts() {
         return Collections.unmodifiableList(this.products);
+    }
+
+    public int normalProductStockQuantity() {
+        return this.products.stream()
+                .filter(i -> !i.isPromotedProduct())
+                .mapToInt(Product::getCurrentQuantity)
+                .sum();
+    }
+
+    public void decreasePromotionStock(int size) {
+        Product promotionProduct = getPromotionProduct();
+        promotionProduct.decreaseQuantity(size);
+    }
+
+    private Product getPromotionProduct() {
+        return this.products.stream().filter(Product::isPromotedProduct).findFirst().get();
+    }
+
+    public void decreaseNormalStock(int size) {
+        Product defaultProduct = getDefaultProduct();
+        defaultProduct.decreaseQuantity(size);
+    }
+
+    private Product getDefaultProduct() {
+        return this.products.stream().filter(product -> !product.isPromotedProduct()).findFirst().get();
+    }
+
+    public void decreaseAllNormalStock() {
+        Product defaultProduct = getDefaultProduct();
+        defaultProduct.decreaseAll();
+    }
+
+    public int getMaxAvailableQuantity() {
+        int defaultSize = getPromotionDefaultQuantity();
+        int max = getPromotionAvailableStockQuantity() / defaultSize;
+        return max * defaultSize;
+    }
+
+    public int getShouldDecreaseQuantity() {
+        return getUserRequestSize() - getMaxAvailableQuantity();
     }
 }

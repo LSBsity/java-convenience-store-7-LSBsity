@@ -1,11 +1,14 @@
 package store.domain.model.dto;
 
+import store.common.constant.StoreConst;
+
 public enum Suggestion {
 
-    ADDITIONAL_FREE_PRODUCT("현재 %s은(는) %d개를 무료로 더 받을 수 있습니다. 추가하시겠습니까?", true),
-    INSUFFICIENT_PROMOTION_STOCK("현재 %s %d개는 프로모션 할인이 적용되지 않습니다. 그래도 구매하시겠습니까?",  true),
-    ALREADY_ELIGIBLE("", false),
-    NONE("", false),
+    ADDITIONAL_FREE_PRODUCT(StoreConst.ADDITIONAL_FREE_PRODUCT_MSG, true),
+    INSUFFICIENT_PROMOTION_STOCK(StoreConst.INSUFFICIENT_PROMOTION_STOCK_MSG, true),
+    EXCESSIVE_ADDITIONAL_PURCHASE(StoreConst.EXCESSIVE_ADDITIONAL_PURCHASE_MSG, true),
+    ALREADY_ELIGIBLE(StoreConst.EMPTY_MSG, false),
+    NONE(StoreConst.EMPTY_MSG, false),
     ;
 
     private final String format;
@@ -17,7 +20,7 @@ public enum Suggestion {
     }
 
     public String getFormat() {
-        return format + "(Y/N)\n";
+        return format + " " + StoreConst.YES_OR_NO;
     }
 
     public boolean isShouldPrint() {

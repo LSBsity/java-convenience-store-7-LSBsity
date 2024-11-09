@@ -44,15 +44,19 @@ public class ProductMarkDownFileParser implements ProductParser {
         }
 
         try {
-            String name = fields[0];
-            int price = Integer.parseInt(fields[1]);
-            int quantity = Integer.parseInt(fields[2]);
-            String promotionName = fields[3];
-
-            Promotion promotion = currentPromotions.findPromotionByName(promotionName);
-            return Product.of(name, price, quantity, promotion, promotion.isValidPromotion());
+            return parseEachField(currentPromotions, fields);
         } catch (NumberFormatException e) {
             throw new BusinessException(ErrorCode.FILE_PARSE_OR_PATH_ERROR);
         }
+    }
+
+    private static Product parseEachField(CurrentPromotions currentPromotions, String[] fields) {
+        String name = fields[0];
+        int price = Integer.parseInt(fields[1]);
+        int quantity = Integer.parseInt(fields[2]);
+        String promotionName = fields[3];
+
+        Promotion promotion = currentPromotions.findPromotionByName(promotionName);
+        return Product.of(name, price, quantity, promotion, promotion.isValidPromotion(), true);
     }
 }

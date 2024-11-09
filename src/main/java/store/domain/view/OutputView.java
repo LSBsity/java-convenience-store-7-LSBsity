@@ -3,19 +3,20 @@ package store.domain.view;
 import store.common.constant.InvoicePrintConst;
 import store.common.constant.StoreConst;
 import store.domain.model.product.CurrentProducts;
-import store.domain.model.product.Product;
-import store.domain.model.store.Invoice;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import store.domain.model.store.invoice.Invoice;
 
 public class OutputView {
 
-    public void showStock(CurrentProducts currentProducts) {
+    private final CurrentProducts currentProducts;
+
+    public OutputView(CurrentProducts currentProducts) {
+        this.currentProducts = currentProducts;
+    }
+
+    public void showStock() {
         welcome();
         printHavingProductMessage();
-        printProductStock(currentProducts.getCurrentProducts());
+        printProductStock();
     }
 
     public void showInvoice(Invoice invoice) {
@@ -35,8 +36,9 @@ public class OutputView {
         System.out.println();
     }
 
-    private void printProductStock(Map<String, List<Product>> productMap) {
-        productMap.forEach((productName, products) -> products.forEach(System.out::println));
+    private void printProductStock() {
+        currentProducts.getCurrentProducts()
+                .forEach((productName, products) -> products.forEach(System.out::println));
         System.out.println();
     }
 
@@ -53,10 +55,12 @@ public class OutputView {
     }
 
     private static void printGiftProduct(Invoice invoice) {
+        System.out.println(InvoicePrintConst.PRINT_GIFT_TITLE);
         System.out.print(invoice.printGifts());
     }
 
     private static void printPurchasedProduct(Invoice invoice) {
+        System.out.println(InvoicePrintConst.PRINT_NAME_QUANTITY_PRICE);
         System.out.print(invoice.printPurchasedProduct());
     }
 }

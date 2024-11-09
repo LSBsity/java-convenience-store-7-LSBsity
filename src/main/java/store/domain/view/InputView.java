@@ -4,25 +4,26 @@ import camp.nextstep.edu.missionutils.Console;
 import store.common.constant.StoreConst;
 import store.common.exception.BusinessException;
 import store.common.exception.ErrorCode;
-import store.domain.model.dto.ConfirmedProduct;
-import store.domain.model.dto.StoreSuggestion;
-import store.domain.model.dto.Suggestion;
+import store.domain.model.dto.*;
 import store.common.parser.input.InputParser;
 import store.domain.model.product.CurrentProducts;
-import store.domain.model.dto.UserWish;
 import store.domain.model.promotion.UserAnswer;
+import store.domain.model.store.SuggestionService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class InputView {
 
     private final InputParser inputparser;
+    private final CurrentProducts currentProducts;
 
-    public InputView(InputParser inputparser) {
+    public InputView(InputParser inputparser, CurrentProducts currentProducts) {
         this.inputparser = inputparser;
+        this.currentProducts = currentProducts;
     }
 
-    public List<UserWish.Request> getUserWishList(CurrentProducts currentProducts) {
+    public List<UserWish.Request> getUserWishList() {
         requestNameAndQuantity();
         while (true) {
             try {
@@ -41,7 +42,7 @@ public class InputView {
     public List<ConfirmedProduct> showSuggestions(List<StoreSuggestion> storeSuggestions) {
         return storeSuggestions.stream()
                 .map(this::suggestToUserAndTakeConfirm)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     private UserAnswer getUserConfirm() {
@@ -66,30 +67,20 @@ public class InputView {
     }
 
     private ConfirmedProduct suggestToUserAndTakeConfirm(StoreSuggestion storeSuggestion) {
+        UserAnswer userAnswer = printSuggest(storeSuggestion);
+        return ConfirmedProduct.of(storeSuggestion, userAnswer);
+    }
+
+    private UserAnswer printSuggest(StoreSuggestion storeSuggestion) {
+        UserAnswer userConfirm = UserAnswer.NO;
         Suggestion suggestion = storeSuggestion.getSuggestion();
-
-        String name = storeSuggestion.getProductName();
-        int offerSize = storeSuggestion.getOfferSize();
-        int userRequestSize = storeSuggestion.getUserRequestSize();
-
-        UserAnswer userAnswer = printSuggest(suggestion, name, offerSize);
-
-        changeUserRequestQuantity(storeSuggestion, userAnswer, userRequestSize, offerSize);
-        return ConfirmedProduct.of(storeSuggestion.getProducts(), storeSuggestion.getUserRequestSize());
-    }
-
-    private static void changeUserRequestQuantity(StoreSuggestion storeSuggestion, UserAnswer userAnswer, int userRequestSize, int offerSize) {
-        if (isAdditionalFree(storeSuggestion) && userAnswer == UserAnswer.YES) {
-            storeSuggestion.addUserRequestSize();
+        if (suggestion.isShouldPrint()) {
+            System.out.printf(suggestion.getFormat(), storeSuggestion.getProductName(), storeSuggestion.getOfferSize());
+            userConfirm = getUserConfirm();
         }
-        if (storeSuggestion.getSuggestion() == Suggestion.INSUFFICIENT_PROMOTION_STOCK && userAnswer == UserAnswer.NO) {
-            storeSuggestion.changeUserRequestSize(userRequestSize - offerSize);
-        }
+        return userConfirm;
     }
 
-    private static boolean isAdditionalFree(StoreSuggestion storeSuggestion) {
-        return storeSuggestion.getSuggestion() == Suggestion.ADDITIONAL_FREE_PRODUCT;
-    }
 
     private UserAnswer printSuggest(Suggestion suggestion, String name, int size) {
         UserAnswer userConfirm = UserAnswer.NO;
@@ -102,6 +93,18 @@ public class InputView {
 
     public UserAnswer askMembershipSale() {
         System.out.println(StoreConst.ASK_MEMBERSHIP_SALE);
+        while (true) {
+            try {
+                String input = Console.readLine();
+                return validateUserAnswerInput(input);
+            } catch (BusinessException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    public UserAnswer tryAgain() {
+        System.out.println(StoreConst.TRY_AGAIN);
         while (true) {
             try {
                 String input = Console.readLine();

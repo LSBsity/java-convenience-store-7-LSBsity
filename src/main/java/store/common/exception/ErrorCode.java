@@ -15,7 +15,7 @@ public enum ErrorCode {
     WISH_PRODUCT_INPUT_FORMAT_ERROR(StoreConst.WISH_PRODUCT_INPUT_FORAT_ERROR_MSG),
 
     USER_CONFIRM_INPUT_ERROR(StoreConst.USER_CONFIRM_INPUT_ERROR),
-    ;
+    STOCK_UNDERFLOW(StoreConst.STOCK_UNDERFLOW);
     private final String message;
 
     ErrorCode(final String message) {

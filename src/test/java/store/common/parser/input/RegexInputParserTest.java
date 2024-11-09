@@ -37,12 +37,12 @@ class RegexInputParserTest {
                 LocalDate.of(2024, 1, 4)
         );
 
-        Product product1 = Product.of("콜라", 1000, 10, onePlusOne, true);
-        Product product2 = Product.of("콜라", 1000, 10, Promotion.createNone(), false);
-        Product product3 = Product.of("사이다", 1000, 8, twoPlusone, true);
-        Product product4 = Product.of("사이다", 1000, 7, Promotion.createNone(), true);
-        Product product5 = Product.of("오렌지주스", 1800, 9, twoPlusone, true);
-        Product product6 = Product.of("오렌지주스", 1800, 0, Promotion.createNone(), false);
+        Product product1 = Product.of("콜라", 1000, 10, onePlusOne, true, false);
+        Product product2 = Product.of("콜라", 1000, 10, Promotion.createNone(), false, false);
+        Product product3 = Product.of("사이다", 1000, 8, twoPlusone, true, false);
+        Product product4 = Product.of("사이다", 1000, 7, Promotion.createNone(), true, false);
+        Product product5 = Product.of("오렌지주스", 1800, 9, twoPlusone, true, false);
+        Product product6 = Product.of("오렌지주스", 1800, 0, Promotion.createNone(), false, false);
 
         currentProducts = CurrentProducts.create(List.of(product1, product2, product3, product4, product5, product6));
     }
