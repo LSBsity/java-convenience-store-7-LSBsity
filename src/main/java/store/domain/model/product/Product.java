@@ -1,5 +1,7 @@
 package store.domain.model.product;
 
+import camp.nextstep.edu.missionutils.Console;
+import camp.nextstep.edu.missionutils.DateTimes;
 import store.common.constant.StoreConst;
 import store.common.exception.BusinessException;
 import store.common.exception.ErrorCode;
@@ -58,7 +60,8 @@ public class Product {
     }
 
     public boolean isPromotionActive() {
-        return this.promotion.isAvailable(LocalDate.now());
+        return this.promotion.isAvailable(DateTimes.now());
+
     }
 
     @Override
