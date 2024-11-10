@@ -40,7 +40,7 @@ public class InputView {
     }
 
     public UserAnswer askMembershipSale() {
-        System.out.println(StoreConst.ASK_MEMBERSHIP_SALE);
+        System.out.println(StoreConst.ASK_MEMBERSHIP_SALE_MSG);
 
         return readInputAndHandleErrors(this::getValidatedUserAnswer);
     }
