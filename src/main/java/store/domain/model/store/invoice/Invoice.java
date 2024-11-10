@@ -117,7 +117,7 @@ public class Invoice {
     }
 
     private void setMembershipDiscountPrice(final UserAnswer isMemberShip) {
-        if (isMemberShip == UserAnswer.NO) return;
+        if (isMemberShip == null || isMemberShip == UserAnswer.NO) return;
 
         int membershipDiscountPrice = calculateMembershipDiscount();
         setMembershipDiscountAmount(membershipDiscountPrice);

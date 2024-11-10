@@ -59,7 +59,6 @@ public class ConvenienceStore {
     }
 
     private static void writeProductFile(final CurrentProducts currentProducts) {
-//        ProductWriter.writeProductsToFile(StoreConst.PRODUCTS_FILE_PATH, currentProducts);
+        ProductWriter.writeProductsToFile(StoreConst.PRODUCTS_FILE_PATH, currentProducts);
     }
-
 }
