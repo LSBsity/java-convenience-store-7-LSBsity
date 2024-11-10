@@ -301,11 +301,14 @@ public class OutputView {
 > ![](https://velog.velcdn.com/images/sity51/post/cda855ea-1abb-4e7d-9acf-155e668c8e3b/image.png)
 > ### **7) ✅ 구매 상품 내역, 증정 상품 내역, 금액 정보 영수증 생성, 출력하기 -> 테스트 🧪**
 > >**7번 항목 테스트 실행 결과**
-> ![](https://velog.velcdn.com/images/sity51/post/1836cdf4-216a-4cbc-85be-4d1a76abb5f0/image.png)
+> ![](https://velog.velcdn.com/images/sity51/post/59492abf-015f-48e3-a79a-041fd2969a8f/image.png)
 > ### **8) ✅ 추가 구매 여부를 확인하고 초기 로직으로 돌아가기 or 종료하는 로직 구현**
 ---------------------
+
 [//]: # (# ✅ 개발 완료 - 주요 관심사)
-[//]: # (> ### **1&#41; ??**)
+
+[//]: # (> ### **1&#41; )
+
 [//]: # (---------------------)
 # ✅️ 전체 테스트 결과
-> ![](https://velog.velcdn.com/images/sity51/post/4c57b975-08a5-4dd1-b9e9-8ee612a36e1c/image.png)
+> ![](https://velog.velcdn.com/images/sity51/post/9c318da2-1cb9-4c95-b449-3a7b4aaa0632/image.png)
