@@ -66,7 +66,13 @@ public class ProductMarkDownFileParser implements ProductParser {
         int price = Integer.parseInt(fields[1]);
         int quantity = Integer.parseInt(fields[2]);
 
+        validateQuantity(price, quantity);
         return Product.of(name, price, quantity, promotion, promotion.isValidPromotion(), true);
     }
 
+    private static void validateQuantity(final int price, final int quantity) {
+        if (price < 0 || quantity < 0) {
+            throw new BusinessException(ErrorCode.FILE_CONTAINS_NEGATIVE_NUMBERS);
+        }
+    }
 }
