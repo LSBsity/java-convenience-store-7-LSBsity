@@ -7,9 +7,7 @@ import java.util.List;
 public class SuggestionService {
 
     public void adjustUserRequestQuantity(final ConfirmedProduct confirmedProduct) {
-        SuggestionType suggestion = confirmedProduct.getSuggestionType();
-
-        suggestion.adjustRequestSizeByAnswer(confirmedProduct);
+        confirmedProduct.adjustRequestSizeByAnswer();
     }
 
     public void suggest(final List<StoreSuggestion> defaultSuggestion) {
@@ -58,7 +56,7 @@ public class SuggestionService {
             return false;
         }
 
-        if (promotionAvailableStockQuantity < requestSize) { // 프로모션 재고가 부족하다면
+        if (promotionAvailableStockQuantity <= requestSize) { // 프로모션 재고가 부족하다면
             int forAskUserToBuyQuantity = getPossibleQuantity(promotionAvailableStockQuantity, promotionDefaultSize, requestSize);
             suggestion.changeOfferSize(forAskUserToBuyQuantity);
             return true;

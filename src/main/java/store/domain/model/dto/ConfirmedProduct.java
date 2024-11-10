@@ -47,7 +47,7 @@ public class ConfirmedProduct {
         return storeSuggestion.getUserRequestSize();
     }
 
-    public boolean isPromoted() {
+    private boolean isPromoted() {
         return storeSuggestion.getProducts().stream()
                 .anyMatch(Product::isPromotedProduct);
     }
@@ -78,5 +78,9 @@ public class ConfirmedProduct {
 
     public void changeUserRequestSize(final int size) {
         this.storeSuggestion.changeUserRequestSize(size);
+    }
+
+    public void adjustRequestSizeByAnswer() {
+        this.getSuggestionType().adjustRequestSizeByAnswer(this);
     }
 }

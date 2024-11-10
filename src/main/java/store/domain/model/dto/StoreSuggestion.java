@@ -105,21 +105,29 @@ public class StoreSuggestion {
         promotionProduct.decreaseQuantity(size);
     }
 
-    private Product getPromotionProduct() {
-        return this.products.stream().filter(Product::isPromotedProduct).findFirst().get();
-    }
-
     public void decreaseNormalStock(int size) {
         Product defaultProduct = getDefaultProduct();
         defaultProduct.decreaseQuantity(size);
-    }
-
-    private Product getDefaultProduct() {
-        return this.products.stream().filter(product -> !product.isPromotedProduct()).findFirst().get();
     }
 
     public void decreaseAllNormalStock() {
         Product defaultProduct = getDefaultProduct();
         defaultProduct.decreaseAll();
     }
+
+    private Product getPromotionProduct() {
+        return this.products.stream()
+                .filter(Product::isPromotedProduct)
+                .findFirst()
+                .get();
+    }
+
+
+    private Product getDefaultProduct() {
+        return this.products.stream()
+                .filter(product -> !product.isPromotedProduct())
+                .findFirst()
+                .get();
+    }
+
 }

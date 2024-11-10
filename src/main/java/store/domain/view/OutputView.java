@@ -21,7 +21,7 @@ public class OutputView {
         printSummary(invoice);
     }
 
-    public static void welcome() {
+    private static void welcome() {
         System.out.println(StoreConst.WELCOME_MSG);
     }
 
