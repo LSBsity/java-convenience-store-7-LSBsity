@@ -1,4 +1,4 @@
-package store.domain.model.store;
+package store.domain.model.store.servce.store;
 
 import store.domain.model.dto.ConfirmedProduct;
 import store.domain.model.dto.StoreSuggestion;
@@ -7,6 +7,8 @@ import store.domain.model.product.CurrentProducts;
 import store.domain.model.product.Product;
 import store.domain.model.promotion.UserAnswer;
 import store.domain.model.store.invoice.Invoice;
+import store.domain.model.store.servce.suggestion.SuggestionService;
+import store.domain.model.store.servce.stock.StockService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,7 +48,7 @@ public class StoreManager {
         return this.currentProducts.hasAvailableStock();
     }
 
-    public List<StoreSuggestion> suggest(final List<UserWish.Request> userWishList) {
+    public List<StoreSuggestion> suggest(final List<UserWish> userWishList) {
         List<StoreSuggestion> suggestions = userWishList.stream()
                 .map(this::createSuggestion)
                 .collect(Collectors.toList());
@@ -55,7 +57,7 @@ public class StoreManager {
         return suggestions;
     }
 
-    private StoreSuggestion createSuggestion(final UserWish.Request request) {
+    private StoreSuggestion createSuggestion(final UserWish request) {
         String requestProductName = request.getProductName();
         int requestQuantity = request.getQuantity();
 

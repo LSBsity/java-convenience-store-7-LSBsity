@@ -27,12 +27,13 @@ public class ConfirmedProduct {
         return this.storeSuggestion.getSuggestionType();
     }
 
-    public UserAnswer getUserAnswer() {
-        return userAnswer;
+    public void updateStock(ConfirmedProduct confirmedProduct) {
+        SuggestionType suggestionType = this.getSuggestionType();
+        suggestionType.updateStock(confirmedProduct);
     }
 
-    public boolean isPromotionActive() {
-        return this.getProduct().isPromotionActive();
+    public UserAnswer getUserAnswer() {
+        return userAnswer;
     }
 
     public int getPromotionStock() {
@@ -56,7 +57,7 @@ public class ConfirmedProduct {
     }
 
     public boolean isAvailablePromotion() {
-        return isPromoted() && isPromotionActive();
+        return isPromoted();
     }
 
     public Product getProduct() {

@@ -2,25 +2,23 @@ package store.domain.model.dto;
 
 public class UserWish {
 
-    public static class Request {
-        private final String productName;
-        private final int quantity;
+    private final String productName;
+    private final int quantity;
 
-        private Request(String productName, int quantity) {
-            this.productName = productName;
-            this.quantity = quantity;
-        }
+    private UserWish(String productName, int quantity) {
+        this.productName = productName;
+        this.quantity = quantity;
+    }
 
-        public static Request of(String productName, int quantity) {
-            return new Request(productName, quantity);
-        }
+    public static UserWish of(String productName, int quantity) {
+        return new UserWish(productName, quantity);
+    }
 
-        public String getProductName() {
-            return productName;
-        }
+    public String getProductName() {
+        return productName;
+    }
 
-        public int getQuantity() {
-            return quantity;
-        }
+    public int getQuantity() {
+        return quantity;
     }
 }

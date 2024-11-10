@@ -6,5 +6,5 @@ import store.domain.model.dto.UserWish;
 import java.util.List;
 
 public interface InputParser {
-    List<UserWish.Request> validateNameAndQuantity(String input, CurrentProducts currentProducts);
+    List<UserWish> validateNameAndQuantity(String input, CurrentProducts currentProducts);
 }

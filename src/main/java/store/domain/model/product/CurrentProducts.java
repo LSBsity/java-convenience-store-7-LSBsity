@@ -16,23 +16,27 @@ public class CurrentProducts {
     }
 
     public static CurrentProducts create(final List<Product> productList) {
-        Map<String, List<Product>> productMap = productList.stream()
+        Map<String, List<Product>> currentProducts = groupingByProductName(productList);
+
+        addDefaultProductIfOnlyPromotedExists(currentProducts);
+        return new CurrentProducts(currentProducts);
+    }
+
+    private static Map<String, List<Product>> groupingByProductName(final List<Product> productList) {
+        return productList.stream()
                 .collect(Collectors.groupingBy(
                         Product::getName,
                         LinkedHashMap::new,
-                        Collectors.collectingAndThen(Collectors.toList(),productComparator())
+                        Collectors.collectingAndThen(Collectors.toList(), productComparator())
                 ));
-
-        addDefaultProductIfOnlyPromotedExists(productMap);
-        return new CurrentProducts(productMap);
     }
 
     /**
      * Products.md에 프로모션 물품만 있고 프로모션 미적용 물품이 없다면 이름과 가격을 카피해서 ProductMap에 추가함
      */
-    private static void addDefaultProductIfOnlyPromotedExists(final Map<String, List<Product>> productMap) {
-        for (String productName : productMap.keySet()) {
-            List<Product> products = productMap.get(productName);
+    private static void addDefaultProductIfOnlyPromotedExists(final Map<String, List<Product>> currentProducts) {
+        for (String productName : currentProducts.keySet()) {
+            List<Product> products = currentProducts.get(productName);
             Product first = products.getFirst();
             if (products.size() == 1 && first.isPromotedProduct()) {
                 Product emptyProduct = Product.createCopyOfProduct(first);

@@ -15,8 +15,8 @@ public class Invoice {
     private final List<ProductInfo> purchasedProducts;
     private final List<ProductInfo> giftProducts;
 
-    private int originalPrice = 0;
-    private int promotionDiscountAmount = 0;
+    private int nonDiscountedPrice = 0;
+    private int promotionDiscountedAmount = 0;
     private int membershipDiscountAmount = 0;
     private int totalPrice = 0;
 
@@ -37,6 +37,17 @@ public class Invoice {
         return new Invoice(purchasedProducts, giftProducts);
     }
 
+    public void takeSummary(final UserAnswer isMemberShip) {
+        int nondiscountedPrice = calculateNonDiscountedPrice(); //차감 전 금액
+        int totalGiftPrice = calculateTotalGiftPrice();         //차감할 금액
+        setNonDiscountedPrice(nondiscountedPrice);
+        setMembershipDiscountPrice(isMemberShip);
+        setPromotionDiscountedPrice(totalGiftPrice);
+        setTotalPrice(nondiscountedPrice - promotionDiscountedAmount - membershipDiscountAmount);
+    }
+    /**
+     * 영수증에 구매한 물품 표시를 위한 리스트 저장
+     */
     private static void addNormalProduct(final ConfirmedProduct confirmedWishList, final List<ProductInfo> purchasedProducts) {
         int userRequestSize = confirmedWishList.getUserRequestSize();
         if (userRequestSize == 0) return;
@@ -47,6 +58,9 @@ public class Invoice {
         purchasedProducts.add(product);
     }
 
+    /**
+     * 영수증에 증정된 물품 표시를 위한 리스트 저장
+     */
     private static void addGiftProduct(final ConfirmedProduct confirmedWishList, final List<ProductInfo> giftProducts) {
         if (!confirmedWishList.isAvailablePromotion()) return;
 
@@ -70,28 +84,28 @@ public class Invoice {
         return userGiftQuantity;
     }
 
-    public void setOriginalPrice(int totalAmountPaid) {
-        this.originalPrice = totalAmountPaid;
+    public void setNonDiscountedPrice(final int nonDiscountedPrice) {
+        this.nonDiscountedPrice = nonDiscountedPrice;
     }
 
-    public void setPromotionDiscountAmount(int promotionDiscountAmount) {
-        this.promotionDiscountAmount += promotionDiscountAmount;
+    public void setPromotionDiscountedPrice(final int promotionDiscountedAmount) {
+        this.promotionDiscountedAmount += promotionDiscountedAmount;
     }
 
-    public void setMembershipDiscountAmount(int membershipDiscountAmount) {
+    public void setMembershipDiscountAmount(final int membershipDiscountAmount) {
         this.membershipDiscountAmount += membershipDiscountAmount;
     }
 
-    public int getOriginalPrice() {
-        return originalPrice;
+    public int getNonDiscountedPrice() {
+        return nonDiscountedPrice;
     }
 
-    public void setTotalPrice(int finalAmount) {
+    public void setTotalPrice(final int finalAmount) {
         this.totalPrice += finalAmount;
     }
 
-    public int getPromotionDiscountAmount() {
-        return promotionDiscountAmount;
+    public int getPromotionDiscountedAmount() {
+        return promotionDiscountedAmount;
     }
 
     public int getMembershipDiscountAmount() {
@@ -102,20 +116,11 @@ public class Invoice {
         return totalPrice;
     }
 
-    public void takeSummary(final UserAnswer isMemberShip) {
-        int nondiscountedPrice = calculateNonDiscountedPrice();
-        int totalGiftPrice = calculateTotalGiftPrice();
-        setOriginalPrice(nondiscountedPrice);
-        setMembershipDiscountIfAnswered(isMemberShip);
-        setPromotionDiscountAmount(totalGiftPrice);
-        setTotalPrice(nondiscountedPrice - promotionDiscountAmount - membershipDiscountAmount);
-    }
+    private void setMembershipDiscountPrice(final UserAnswer isMemberShip) {
+        if (isMemberShip == UserAnswer.NO) return;
 
-    private void setMembershipDiscountIfAnswered(final UserAnswer isMemberShip) {
-        if (isMemberShip == UserAnswer.YES) {
-            int membershipDiscountPrice = calculateMembershipDiscount();
-            setMembershipDiscountAmount(membershipDiscountPrice);
-        }
+        int membershipDiscountPrice = calculateMembershipDiscount();
+        setMembershipDiscountAmount(membershipDiscountPrice);
     }
 
     private int calculateNonDiscountedPrice() {
@@ -130,21 +135,29 @@ public class Invoice {
                 .sum();
     }
 
+    /**
+     * 프로모션이 아니거나 기간이 지난 상품에 대해서만 멤버십 할인 적용
+     */
     private int calculateMembershipDiscount() {
         return (int) (purchasedProducts.stream()
-                .filter(productPair -> productPair.inNotPromoted() || productPair.isExpired())
+                .filter(Invoice::isMembershipDiscountable)
                 .mapToInt(ProductInfo::calculateTotalPrice)
                 .sum() * StoreConst.MEMBERSHIP_DISCOUNT_RATE);
     }
 
+    private static boolean isMembershipDiscountable(final ProductInfo productPair) {
+        return productPair.inNotPromoted() || productPair.isExpired();
+    }
 
     public int getTotalQuantity() {
-        return this.purchasedProducts.stream().mapToInt(ProductInfo::getSize).sum();
+        return this.purchasedProducts.stream()
+                .mapToInt(ProductInfo::getSize)
+                .sum();
     }
 
     public String printSummary() {
-        return String.format(InvoicePrintConst.NO_DISCOUNTED_PRICE, InvoicePrintConst.NO_DISCOUNTED_PRICE_NAME, getTotalQuantity(), getOriginalPrice()) +
-                String.format(InvoicePrintConst.PROMOTION_DISCOUNTED_PRICE, InvoicePrintConst.PROMOTION_DISCOUNTED_PRICE_NAME, getPromotionDiscountAmount()) +
+        return String.format(InvoicePrintConst.NO_DISCOUNTED_PRICE, InvoicePrintConst.NO_DISCOUNTED_PRICE_NAME, getTotalQuantity(), getNonDiscountedPrice()) +
+                String.format(InvoicePrintConst.PROMOTION_DISCOUNTED_PRICE, InvoicePrintConst.PROMOTION_DISCOUNTED_PRICE_NAME, getPromotionDiscountedAmount()) +
                 String.format(InvoicePrintConst.MEMBERSHIP_DISCOUNTED_PRICE, InvoicePrintConst.MEMBERSHIP_DISCOUNTED_PRICE_NAME, getMembershipDiscountAmount()) +
                 String.format(InvoicePrintConst.TOTAL_PRICE, InvoicePrintConst.TOTAL_PRICE_NAME, getTotalPrice());
     }

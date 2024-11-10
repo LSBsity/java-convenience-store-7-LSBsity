@@ -1,11 +1,13 @@
 package store.domain.controller;
 
+import store.common.constant.StoreConst;
+import store.common.writer.ProductWriter;
 import store.domain.model.dto.ConfirmedProduct;
 import store.domain.model.dto.StoreSuggestion;
 import store.domain.model.dto.UserWish;
 import store.domain.model.product.CurrentProducts;
 import store.domain.model.promotion.UserAnswer;
-import store.domain.model.store.StoreManager;
+import store.domain.model.store.servce.store.StoreManager;
 import store.domain.model.store.invoice.Invoice;
 import store.domain.view.InputView;
 import store.domain.view.OutputView;
@@ -26,14 +28,15 @@ public class ConvenienceStore {
 
     public void run() {
         do {
-            List<UserWish.Request> userWishList = getUserWishList(storeManager.getCurrentProducts());
+            List<UserWish> userWishList = getUserWishList(storeManager.getCurrentProducts());
 
-            List<ConfirmedProduct> confirmedWishLists = suggestAndHandle(userWishList);
+            List<ConfirmedProduct> userConfirmedWishList = suggestAndHandle(userWishList);
 
             UserAnswer isMemberShip = inputView.askMembershipSale();
-            Invoice invoice = storeManager.issueInvoice(confirmedWishLists, isMemberShip);
 
-            storeManager.updateStock(confirmedWishLists);
+            Invoice invoice = storeManager.issueInvoice(userConfirmedWishList, isMemberShip);
+
+            storeManager.updateStock(userConfirmedWishList);
 
             outputView.showInvoice(invoice);
         } while (storeManager.hasAvailableStock() && inputView.tryAgain() == UserAnswer.YES);
@@ -41,13 +44,13 @@ public class ConvenienceStore {
         writeProductFile(storeManager.getCurrentProducts());
     }
 
-    private List<UserWish.Request> getUserWishList(final CurrentProducts currentProducts) {
+    private List<UserWish> getUserWishList(final CurrentProducts currentProducts) {
         outputView.showStock(currentProducts);
-        List<UserWish.Request> userWishList = inputView.getUserWishList(currentProducts);
+        List<UserWish> userWishList = inputView.getUserWishList(currentProducts);
         return userWishList;
     }
 
-    private List<ConfirmedProduct> suggestAndHandle(final List<UserWish.Request> userWishList) {
+    private List<ConfirmedProduct> suggestAndHandle(final List<UserWish> userWishList) {
         List<StoreSuggestion> storeSuggestions = storeManager.suggest(userWishList);
 
         List<ConfirmedProduct> confirmedWishLists = inputView.showSuggestions(storeSuggestions);
@@ -56,7 +59,7 @@ public class ConvenienceStore {
     }
 
     private static void writeProductFile(final CurrentProducts currentProducts) {
-//        ProductWriter.writeProductsToFile(currentProducts, StoreConst.PRODUCTS_FILE_PATH);
+//        ProductWriter.writeProductsToFile(StoreConst.PRODUCTS_FILE_PATH, currentProducts);
     }
 
 }

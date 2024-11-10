@@ -30,7 +30,7 @@ public class InputView {
         }
     }
 
-    public List<UserWish.Request> getUserWishList(final CurrentProducts currentProducts) {
+    public List<UserWish> getUserWishList(final CurrentProducts currentProducts) {
         System.out.println(StoreConst.NAME_QUANTITY_REQ_MSG);
 
         return readInputAndHandleErrors(() -> {

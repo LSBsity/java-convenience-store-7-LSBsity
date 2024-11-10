@@ -14,6 +14,7 @@ import store.domain.model.product.Product;
 import store.domain.model.promotion.Promotion;
 import store.domain.model.promotion.PromotionType;
 import store.domain.model.promotion.UserAnswer;
+import store.domain.model.store.servce.stock.StockService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -108,52 +109,47 @@ class StockServiceTest {
                 class IF_USER_YES {
 
                     @Nested
-                    @DisplayName("프로모션 재고를 혜택받을 수 있는 최대 개수 만큼 내려야 하고")
+                    @DisplayName("프로모션 재고가 충분하지 않다면")
                     class DecreaseAllStock {
 
                         final static int CIDER_PROMOTION_QUANTITY = 8;
-                        final static int CIDER_DEFAULT_QUANTITY = 7;
-                        final static int PROMOTION_DEFAULT_SIZE = 3;
 
                         @ParameterizedTest
                         @ValueSource(ints = {10, 11, 12, 13})
-                        @DisplayName("나머지는 일반 재고에서 차감해야 한다.")
+                        @DisplayName("프로모션 재고에서 전부 차감하고 나머지는 일반 재고에서 차감한다.")
                         void decreaseRemainderInDefaultStock(int userRequestSize) {
                             //given
                             StoreSuggestion ciderSuggestion = StoreSuggestion.of(List.of(ciderTPO, ciderNON), userRequestSize);
                             ciderSuggestion.changeSuggestion(SuggestionType.INSUFFICIENT_PROMOTION_STOCK);
 
                             ConfirmedProduct confirmedProduct = ConfirmedProduct.of(ciderSuggestion, UserAnswer.YES);
+                            int before = ciderNON.getCurrentQuantity();
 
                             //when
                             stockService.updateStock(confirmedProduct);
 
                             //then
-                            int promotionDecrease = PROMOTION_DEFAULT_SIZE * (CIDER_PROMOTION_QUANTITY / PROMOTION_DEFAULT_SIZE);
-                            int defaultDecrease = userRequestSize - promotionDecrease;
-
-                            int promotionExpected = CIDER_PROMOTION_QUANTITY - promotionDecrease;
-                            int defaultExpected = CIDER_DEFAULT_QUANTITY - defaultDecrease;
-                            Assertions.assertThat(ciderTPO.getCurrentQuantity()).isEqualTo(promotionExpected);
-                            Assertions.assertThat(ciderNON.getCurrentQuantity()).isEqualTo(defaultExpected);
+                            int defaultStockDecrease = userRequestSize - CIDER_PROMOTION_QUANTITY;
+                            Assertions.assertThat(ciderTPO.getCurrentQuantity()).isEqualTo(0);
+                            Assertions.assertThat(ciderNON.getCurrentQuantity()).isEqualTo(before - defaultStockDecrease);
                         }
 
                         @ParameterizedTest
-                        @ValueSource(ints = {14})
-                        @DisplayName("일반 재고로도 부족하다면 프로모션 재고에서 내린다.")
+                        @ValueSource(ints = {7})
+                        @DisplayName("프로모션 재고가 충분하다면 프로모션 재고에서 전부 내린다.")
                         void decreaseRemainderInPromotionStock(int userRequestSize) {
                             //given
                             StoreSuggestion ciderSuggestion = StoreSuggestion.of(List.of(ciderTPO, ciderNON), userRequestSize);
                             ciderSuggestion.changeSuggestion(SuggestionType.INSUFFICIENT_PROMOTION_STOCK);
 
                             ConfirmedProduct confirmedProduct = ConfirmedProduct.of(ciderSuggestion, UserAnswer.YES);
-
+                            int before = ciderNON.getCurrentQuantity();
                             //when
                             stockService.updateStock(confirmedProduct);
 
                             //then
-                            Assertions.assertThat(ciderTPO.getCurrentQuantity()).isEqualTo(1);
-                            Assertions.assertThat(ciderNON.getCurrentQuantity()).isEqualTo(0);
+                            Assertions.assertThat(ciderTPO.getCurrentQuantity()).isEqualTo(CIDER_PROMOTION_QUANTITY - userRequestSize);
+                            Assertions.assertThat(ciderNON.getCurrentQuantity()).isEqualTo(before);
                         }
                     }
                 }

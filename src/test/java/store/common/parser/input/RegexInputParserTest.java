@@ -56,26 +56,26 @@ class RegexInputParserTest {
         class IfCorrectInput {
 
             @Test
-            @DisplayName("사용자의 구매 물품과 수량을 담은 List<UserWish.Request>를 반환한다.")
+            @DisplayName("사용자의 구매 물품과 수량을 담은 List<UserWish>를 반환한다.")
             void returnUserWishList() {
                 //given
                 String userRequest = "[콜라-3],[사이다-3],[오렌지주스-1]";
 
                 //when
-                List<UserWish.Request> userWishLists = inputParser.validateNameAndQuantity(userRequest, currentProducts);
+                List<UserWish> userWishLists = inputParser.validateNameAndQuantity(userRequest, currentProducts);
 
                 //then
                 Assertions.assertThat(userWishLists.size()).isEqualTo(3);
 
-                UserWish.Request first = userWishLists.get(0);
+                UserWish first = userWishLists.get(0);
                 Assertions.assertThat(first.getProductName()).isEqualTo("콜라");
                 Assertions.assertThat(first.getQuantity()).isEqualTo(3);
 
-                UserWish.Request second = userWishLists.get(1);
+                UserWish second = userWishLists.get(1);
                 Assertions.assertThat(second.getProductName()).isEqualTo("사이다");
                 Assertions.assertThat(second.getQuantity()).isEqualTo(3);
 
-                UserWish.Request third = userWishLists.get(2);
+                UserWish third = userWishLists.get(2);
                 Assertions.assertThat(third.getProductName()).isEqualTo("오렌지주스");
                 Assertions.assertThat(third.getQuantity()).isEqualTo(1);
             }

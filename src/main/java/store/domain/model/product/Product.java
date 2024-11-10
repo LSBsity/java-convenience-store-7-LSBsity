@@ -1,13 +1,8 @@
 package store.domain.model.product;
 
-import camp.nextstep.edu.missionutils.Console;
 import camp.nextstep.edu.missionutils.DateTimes;
 import store.common.constant.StoreConst;
-import store.common.exception.BusinessException;
-import store.common.exception.ErrorCode;
 import store.domain.model.promotion.Promotion;
-
-import java.time.LocalDate;
 
 public class Product {
 

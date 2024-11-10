@@ -23,7 +23,7 @@ public class CurrentPromotions {
         return Collections.unmodifiableList(this.currentPromotions);
     }
 
-    public Promotion findPromotionByName(final String name) {
+    public Promotion findAvailablePromotionByName(final String name) {
         return currentPromotions.stream()
                 .filter(promotion -> promotion.getPromotionName().equals(name))
                 .findFirst()

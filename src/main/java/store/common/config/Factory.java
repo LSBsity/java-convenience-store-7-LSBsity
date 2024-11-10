@@ -7,9 +7,12 @@ import store.common.parser.product.ProductMarkDownFileParser;
 import store.common.parser.product.ProductParser;
 import store.common.parser.promotion.PromotionMarkDownFileParser;
 import store.common.parser.promotion.PromotionParser;
+import store.domain.controller.ConvenienceStore;
 import store.domain.model.product.CurrentProducts;
 import store.domain.model.promotion.CurrentPromotions;
-import store.domain.model.store.*;
+import store.domain.model.store.servce.stock.StockService;
+import store.domain.model.store.servce.store.StoreManager;
+import store.domain.model.store.servce.suggestion.SuggestionService;
 import store.domain.view.InputView;
 import store.domain.view.OutputView;
 
@@ -17,8 +20,8 @@ public class Factory {
 
     private static CurrentProducts currentProducts;
 
-    public store.domain.controller.ConvenienceStore storeController() {
-        return new store.domain.controller.ConvenienceStore(convenienceStore(), inputView(), outputView());
+    public ConvenienceStore storeController() {
+        return new ConvenienceStore(convenienceStore(), inputView(), outputView());
     }
 
     public InputView inputView() {

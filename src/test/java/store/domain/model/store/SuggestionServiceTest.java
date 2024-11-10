@@ -15,6 +15,7 @@ import store.domain.model.product.Product;
 import store.domain.model.promotion.Promotion;
 import store.domain.model.promotion.PromotionType;
 import store.domain.model.promotion.UserAnswer;
+import store.domain.model.store.servce.suggestion.SuggestionService;
 
 import java.time.LocalDate;
 import java.util.List;

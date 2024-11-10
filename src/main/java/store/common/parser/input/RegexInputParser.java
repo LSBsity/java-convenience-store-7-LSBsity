@@ -18,7 +18,7 @@ public class RegexInputParser implements InputParser {
     private static final Pattern WISH_LIST_PATTERN = Pattern.compile(StoreConst.WISH_LIST_INPUT_COMPILE_REGEX);
 
     @Override
-    public List<UserWish.Request> validateNameAndQuantity(final String input, final CurrentProducts currentProducts) {
+    public List<UserWish> validateNameAndQuantity(final String input, final CurrentProducts currentProducts) {
         if (!isValidFormat(input)) throw new BusinessException(ErrorCode.WISH_PRODUCT_INPUT_FORMAT_ERROR);
 
         Matcher matcher = WISH_LIST_PATTERN.matcher(input);
@@ -29,37 +29,41 @@ public class RegexInputParser implements InputParser {
         return input.matches(StoreConst.WISH_LIST_INPUT_REGEX);
     }
 
-    private List<UserWish.Request> parseWishListFromInput(final Matcher matcher, final CurrentProducts currentProducts) {
-        List<UserWish.Request> wishList = new ArrayList<>();
+    private List<UserWish> parseWishListFromInput(final Matcher matcher, final CurrentProducts currentProducts) {
+        List<UserWish> wishList = new ArrayList<>();
         Set<String> productNames = new HashSet<>();
 
         while (matcher.find()) {
             String userRequestProductName = matcher.group(1);
             int userRequestProductQuantity = Integer.parseInt(matcher.group(2));
 
-            validateDuplicate(productNames, userRequestProductName);
-            validateProductAvailability(currentProducts, userRequestProductName, userRequestProductQuantity);
-            wishList.add(UserWish.Request.of(userRequestProductName, userRequestProductQuantity));
+            validate(currentProducts, productNames, userRequestProductName, userRequestProductQuantity);
+            wishList.add(UserWish.of(userRequestProductName, userRequestProductQuantity));
         }
         return wishList;
     }
 
-    private void validateDuplicate(final Set<String> productNames, final String userRequestProductName) {
+    private static void validate(final CurrentProducts currentProducts, final Set<String> productNames, final String userRequestProductName, final int userRequestProductQuantity) {
+        validateDuplicate(productNames, userRequestProductName);
+        validateProductAvailability(currentProducts, userRequestProductName, userRequestProductQuantity);
+    }
+
+    private static void validateDuplicate(final Set<String> productNames, final String userRequestProductName) {
         if (!productNames.add(userRequestProductName)) {
             throw new BusinessException(ErrorCode.WISH_PRODUCT_INPUT_ERROR);
         }
     }
 
-    private void validateProductAvailability(final CurrentProducts currentProducts, final String productName, final int quantity) {
+    private static void validateProductAvailability(final CurrentProducts currentProducts, final String productName, final int quantity) {
         ensureProductExists(currentProducts, productName);
         ensureSufficientStock(currentProducts, productName, quantity);
     }
 
-    private void ensureProductExists(final CurrentProducts products, final String productName) {
-        products.findProductByName(productName);
+    private static void ensureProductExists(final CurrentProducts products, final String productName) {
+        products.findProductByName(productName); //throw WISH_PRODUCT_NOT_EXIST_ERROR if not exist
     }
 
-    private void ensureSufficientStock(final CurrentProducts currentProducts, final String productName, final int requestedQuantity) {
+    private static void ensureSufficientStock(final CurrentProducts currentProducts, final String productName, final int requestedQuantity) {
         int availableStock = currentProducts.getCurrentTotalStockQuantity(productName);
         if (availableStock < requestedQuantity) {
             throw new BusinessException(ErrorCode.WISH_PRODUCT_OUT_OF_STOCK_ERROR);

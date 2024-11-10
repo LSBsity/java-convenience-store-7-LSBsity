@@ -30,7 +30,7 @@ public class ProductInfo {
     }
 
     public int calculateTotalPrice() {
-        return this.product.getPrice() * getSize();
+        return this.product.getPrice() * this.getSize();
     }
 
     public boolean inNotPromoted() {

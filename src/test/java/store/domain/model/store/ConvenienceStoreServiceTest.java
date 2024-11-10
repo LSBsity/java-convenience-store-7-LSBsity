@@ -17,6 +17,9 @@ import store.domain.model.promotion.PromotionType;
 import store.domain.model.promotion.UserAnswer;
 import store.domain.model.store.invoice.Invoice;
 import store.common.testunit.TestConfirmedProduct;
+import store.domain.model.store.servce.stock.StockService;
+import store.domain.model.store.servce.store.StoreManager;
+import store.domain.model.store.servce.suggestion.SuggestionService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -96,7 +99,7 @@ class ConvenienceStoreServiceTest {
                     Invoice invoice = convenienceStore.issueInvoice(confirmedProducts, UserAnswer.YES);
 
                     //then
-                    Assertions.assertThat(invoice.getPromotionDiscountAmount()).isEqualTo(5000);
+                    Assertions.assertThat(invoice.getPromotionDiscountedAmount()).isEqualTo(5000);
                     Assertions.assertThat(invoice.getTotalPrice()).isEqualTo(9000);
                 }
 
@@ -112,7 +115,7 @@ class ConvenienceStoreServiceTest {
                     Invoice invoice = convenienceStore.issueInvoice(confirmedProducts, UserAnswer.YES);
 
                     //then
-                    Assertions.assertThat(invoice.getPromotionDiscountAmount()).isEqualTo(2000);
+                    Assertions.assertThat(invoice.getPromotionDiscountedAmount()).isEqualTo(2000);
                     Assertions.assertThat(invoice.getMembershipDiscountAmount()).isEqualTo(3840);
                     Assertions.assertThat(invoice.getTotalPrice()).isEqualTo(21960);
                 }
@@ -168,7 +171,7 @@ class ConvenienceStoreServiceTest {
                 Invoice invoice = convenienceStore.issueInvoice(confirmedProducts, UserAnswer.YES);
 
                 //then
-                int nonDiscountedPrice = invoice.getOriginalPrice();
+                int nonDiscountedPrice = invoice.getNonDiscountedPrice();
                 int membershipDiscountPrice = (int) (nonDiscountedPrice * StoreConst.MEMBERSHIP_DISCOUNT_RATE);
 
                 int totalPrice = invoice.getTotalPrice();
