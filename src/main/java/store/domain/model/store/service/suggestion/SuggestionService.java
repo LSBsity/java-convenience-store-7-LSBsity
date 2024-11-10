@@ -1,4 +1,4 @@
-package store.domain.model.store.servce.suggestion;
+package store.domain.model.store.service.suggestion;
 
 import store.domain.model.dto.*;
 
@@ -15,20 +15,32 @@ public class SuggestionService {
     }
 
     private void applySuggestion(final StoreSuggestion suggestion) {
-        if (isEligibleForAdditionalPurchase(suggestion)) {
-            suggestion.changeSuggestion(SuggestionType.ADDITIONAL_FREE_PRODUCT);
-            suggestion.changeOfferSize(1);
+        if (isEligibleForAdditionalFreeProduct(suggestion)) {
+            applyAdditionalFreeProduct(suggestion);
         }
         if (isInsufficientPromotionStock(suggestion)) {
-            suggestion.changeSuggestion(SuggestionType.INSUFFICIENT_PROMOTION_STOCK);
+            applyInsufficientPromotionStock(suggestion);
         }
         if (isExcessiveAdditionalPurchase(suggestion)) {
-            suggestion.changeSuggestion(SuggestionType.EXCESSIVE_ADDITIONAL_PURCHASE);
-            suggestion.changeOfferSize(1);
+            applyExcessiveAdditionalPurchase(suggestion);
         }
     }
 
-    private static boolean isEligibleForAdditionalPurchase(final StoreSuggestion suggestion) {
+    private static void applyExcessiveAdditionalPurchase(final StoreSuggestion suggestion) {
+        suggestion.changeSuggestion(SuggestionType.EXCESSIVE_ADDITIONAL_PURCHASE);
+        suggestion.changeOfferSize(1);
+    }
+
+    private static void applyInsufficientPromotionStock(final StoreSuggestion suggestion) {
+        suggestion.changeSuggestion(SuggestionType.INSUFFICIENT_PROMOTION_STOCK);
+    }
+
+    private static void applyAdditionalFreeProduct(final StoreSuggestion suggestion) {
+        suggestion.changeSuggestion(SuggestionType.ADDITIONAL_FREE_PRODUCT);
+        suggestion.changeOfferSize(1);
+    }
+
+    private static boolean isEligibleForAdditionalFreeProduct(final StoreSuggestion suggestion) {
         if (isNotApplicable(suggestion)) return false;
 
         int promotionAvailableStockQuantity = suggestion.getPromotionAvailableStockQuantity();
@@ -55,21 +67,25 @@ public class SuggestionService {
             suggestion.changeSuggestion(SuggestionType.ALREADY_ELIGIBLE);
             return false;
         }
+        return isNotEnoughPromotionStock(suggestion, promotionAvailableStockQuantity, requestSize, promotionDefaultSize);
+    }
 
-        if (promotionAvailableStockQuantity <= requestSize) { // 프로모션 재고가 부족하다면
-            int forAskUserToBuyQuantity = getPossibleQuantity(promotionAvailableStockQuantity, promotionDefaultSize, requestSize);
+    private static boolean isNotEnoughPromotionStock(final StoreSuggestion suggestion,
+                                                     final int promotionAvailableStock,
+                                                     final int requestSize,
+                                                     final int promotionDefaultSize
+    ) {
+        if (promotionAvailableStock <= requestSize) { // 프로모션 재고가 부족하다면
+            int forAskUserToBuyQuantity = getPossibleQuantity(promotionAvailableStock, promotionDefaultSize, requestSize);
             suggestion.changeOfferSize(forAskUserToBuyQuantity);
             return true;
         }
-
         return false;
     }
 
-    private static int getPossibleQuantity(final int promotionAvailableStockQuantity,
-                                                                 final int promotionDefaultSize,
-                                                                 final int requestSize) {
-        int noAvailablePromotionRemainder = promotionAvailableStockQuantity % promotionDefaultSize;
-        int availablePromotionQuantity = promotionAvailableStockQuantity - noAvailablePromotionRemainder;
+    private static int getPossibleQuantity(final int promotionAvailableStock, final int promotionDefaultSize, final int requestSize) {
+        int noAvailablePromotionRemainder = promotionAvailableStock % promotionDefaultSize;
+        int availablePromotionQuantity = promotionAvailableStock - noAvailablePromotionRemainder;
         int forAskUserToBuyQuantity = requestSize - availablePromotionQuantity;
         return forAskUserToBuyQuantity;
     }

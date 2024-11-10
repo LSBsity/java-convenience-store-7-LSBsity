@@ -1,4 +1,4 @@
-package store.domain.model.store.servce.store;
+package store.domain.model.store.service.store;
 
 import store.domain.model.dto.ConfirmedProduct;
 import store.domain.model.dto.StoreSuggestion;
@@ -7,8 +7,8 @@ import store.domain.model.product.CurrentProducts;
 import store.domain.model.product.Product;
 import store.domain.model.promotion.UserAnswer;
 import store.domain.model.store.invoice.Invoice;
-import store.domain.model.store.servce.suggestion.SuggestionService;
-import store.domain.model.store.servce.stock.StockService;
+import store.domain.model.store.service.suggestion.SuggestionService;
+import store.domain.model.store.service.stock.StockService;
 
 import java.util.List;
 import java.util.stream.Collectors;

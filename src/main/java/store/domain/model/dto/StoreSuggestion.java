@@ -3,6 +3,7 @@ package store.domain.model.dto;
 import store.common.exception.BusinessException;
 import store.common.exception.ErrorCode;
 import store.domain.model.product.Product;
+import store.domain.model.store.service.suggestion.SuggestionType;
 
 import java.util.Collections;
 import java.util.List;

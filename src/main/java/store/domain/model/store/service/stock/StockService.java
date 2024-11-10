@@ -1,8 +1,7 @@
-package store.domain.model.store.servce.stock;
+package store.domain.model.store.service.stock;
 
 
 import store.domain.model.dto.ConfirmedProduct;
-import store.domain.model.dto.SuggestionType;
 
 public class StockService {
 

@@ -1,4 +1,4 @@
-package store.domain.model.store;
+package store.domain.model.store.suggestion;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,13 +9,13 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import store.domain.model.dto.ConfirmedProduct;
 import store.domain.model.dto.StoreSuggestion;
-import store.domain.model.dto.SuggestionType;
+import store.domain.model.store.service.suggestion.SuggestionType;
 import store.domain.model.product.CurrentProducts;
 import store.domain.model.product.Product;
 import store.domain.model.promotion.Promotion;
 import store.domain.model.promotion.PromotionType;
 import store.domain.model.promotion.UserAnswer;
-import store.domain.model.store.servce.suggestion.SuggestionService;
+import store.domain.model.store.service.suggestion.SuggestionService;
 
 import java.time.LocalDate;
 import java.util.List;

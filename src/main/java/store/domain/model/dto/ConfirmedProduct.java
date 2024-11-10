@@ -2,6 +2,7 @@ package store.domain.model.dto;
 
 import store.domain.model.product.Product;
 import store.domain.model.promotion.UserAnswer;
+import store.domain.model.store.service.suggestion.SuggestionType;
 
 
 public class ConfirmedProduct {

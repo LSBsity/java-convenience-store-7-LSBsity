@@ -10,9 +10,9 @@ import store.common.parser.promotion.PromotionParser;
 import store.domain.controller.ConvenienceStore;
 import store.domain.model.product.CurrentProducts;
 import store.domain.model.promotion.CurrentPromotions;
-import store.domain.model.store.servce.stock.StockService;
-import store.domain.model.store.servce.store.StoreManager;
-import store.domain.model.store.servce.suggestion.SuggestionService;
+import store.domain.model.store.service.stock.StockService;
+import store.domain.model.store.service.store.StoreManager;
+import store.domain.model.store.service.suggestion.SuggestionService;
 import store.domain.view.InputView;
 import store.domain.view.OutputView;
 

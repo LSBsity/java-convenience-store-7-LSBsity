@@ -8,6 +8,7 @@ import store.domain.model.dto.*;
 import store.common.parser.input.InputParser;
 import store.domain.model.product.CurrentProducts;
 import store.domain.model.promotion.UserAnswer;
+import store.domain.model.store.service.suggestion.SuggestionType;
 
 import java.util.List;
 import java.util.stream.Collectors;

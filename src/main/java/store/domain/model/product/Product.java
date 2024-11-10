@@ -71,12 +71,7 @@ public class Product {
             quantityMessage = StoreConst.NOT_INSTOCK_MSG;
         }
 
-        return String.format(StoreConst.PRODUCT_FORMAT,
-                this.name,
-                this.getPrice(),
-                quantityMessage,
-                promotionMessage
-        );
+        return String.format(StoreConst.PRODUCT_FORMAT, this.name, this.getPrice(), quantityMessage, promotionMessage);
     }
 
     public void decreaseQuantity(int size) {

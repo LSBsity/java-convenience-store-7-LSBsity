@@ -1,4 +1,4 @@
-package store.domain.model.store;
+package store.domain.model.store.store;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,15 +17,15 @@ import store.domain.model.promotion.PromotionType;
 import store.domain.model.promotion.UserAnswer;
 import store.domain.model.store.invoice.Invoice;
 import store.common.testunit.TestConfirmedProduct;
-import store.domain.model.store.servce.stock.StockService;
-import store.domain.model.store.servce.store.StoreManager;
-import store.domain.model.store.servce.suggestion.SuggestionService;
+import store.domain.model.store.service.stock.StockService;
+import store.domain.model.store.service.store.StoreManager;
+import store.domain.model.store.service.suggestion.SuggestionService;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @DisplayName("⭐편의점 서비스 테스트")
-class ConvenienceStoreServiceTest {
+class StoreManagerTest {
 
     StoreManager convenienceStore;
 

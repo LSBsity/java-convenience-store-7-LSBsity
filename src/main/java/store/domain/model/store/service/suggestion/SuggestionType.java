@@ -1,6 +1,8 @@
-package store.domain.model.dto;
+package store.domain.model.store.service.suggestion;
 
 import store.common.constant.StoreConst;
+import store.domain.model.dto.ConfirmedProduct;
+import store.domain.model.dto.StoreSuggestion;
 import store.domain.model.promotion.UserAnswer;
 
 public enum SuggestionType {

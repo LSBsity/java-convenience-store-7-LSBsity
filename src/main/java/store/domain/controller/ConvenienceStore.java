@@ -7,7 +7,7 @@ import store.domain.model.dto.StoreSuggestion;
 import store.domain.model.dto.UserWish;
 import store.domain.model.product.CurrentProducts;
 import store.domain.model.promotion.UserAnswer;
-import store.domain.model.store.servce.store.StoreManager;
+import store.domain.model.store.service.store.StoreManager;
 import store.domain.model.store.invoice.Invoice;
 import store.domain.view.InputView;
 import store.domain.view.OutputView;

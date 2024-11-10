@@ -1,4 +1,4 @@
-package store.domain.model.store;
+package store.domain.model.store.stock;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,13 +8,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import store.domain.model.dto.ConfirmedProduct;
 import store.domain.model.dto.StoreSuggestion;
-import store.domain.model.dto.SuggestionType;
+import store.domain.model.store.service.suggestion.SuggestionType;
 import store.domain.model.product.CurrentProducts;
 import store.domain.model.product.Product;
 import store.domain.model.promotion.Promotion;
 import store.domain.model.promotion.PromotionType;
 import store.domain.model.promotion.UserAnswer;
-import store.domain.model.store.servce.stock.StockService;
+import store.domain.model.store.service.stock.StockService;
 
 import java.time.LocalDate;
 import java.util.List;
