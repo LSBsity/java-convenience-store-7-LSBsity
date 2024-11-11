@@ -62,16 +62,12 @@ public class Product {
     @Override
     public String toString() {
         String promotionMessage = StoreConst.EMPTY;
-        if (this.isPromotedProduct()) {
-            promotionMessage = this.getPromotion().getPromotionName();
-        }
+        if (this.isPromotedProduct()) promotionMessage = this.getPromotion().getPromotionName();
 
         String quantityMessage = this.getCurrentQuantity() + StoreConst.QUANTITY_UNIT;
-        if (this.getCurrentQuantity() == 0) {
-            quantityMessage = StoreConst.NOT_INSTOCK_MSG;
-        }
+        if (this.getCurrentQuantity() == 0) quantityMessage = StoreConst.NOT_INSTOCK_MSG;
 
-        return String.format(StoreConst.PRODUCT_FORMAT, this.name, this.getPrice(), quantityMessage, promotionMessage);
+        return String.format(StoreConst.PRODUCT_FORMAT, this.getName(), this.getPrice(), quantityMessage, promotionMessage);
     }
 
     public void decreaseQuantity(int size) {

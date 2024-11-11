@@ -18,56 +18,54 @@ public class ProductMarkDownFileParser implements ProductParser {
 
     @Override
     public CurrentProducts parseProducts(final String filePath, final CurrentPromotions currentPromotions) {
-        List<Product> products = new ArrayList<>();
-
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            reader.readLine(); // 파일의 헤더는 무시
+            List<Product> products = convertFileToProducts(currentPromotions, reader);
 
-            readFile(reader, products, currentPromotions);
+            return CurrentProducts.create(products);
         } catch (IOException e) {
             throw new BusinessException(ErrorCode.FILE_PARSE_OR_PATH_ERROR);
         }
-
-        return CurrentProducts.create(products);
     }
 
-    private static void readFile(final BufferedReader reader, final List<Product> products,
-                                 final CurrentPromotions currentPromotions) throws IOException {
+    private static List<Product> convertFileToProducts(final CurrentPromotions currentPromotions, final BufferedReader reader) throws IOException {
+        List<Product> products = new ArrayList<>();
+        reader.readLine(); // 파일의 헤더는 무시
         String line;
         while ((line = reader.readLine()) != null) {
             Product product = parseLine(line, currentPromotions);
             products.add(product);
         }
+        return products;
     }
 
     private static Product parseLine(final String line, final CurrentPromotions currentPromotions) {
         String[] fields = line.split(StoreConst.FILE_PARSE_DELIMETER);
-
-        if (fields.length != StoreConst.PRODUCT_COLUMN_SIZE) {
-            throw new BusinessException(ErrorCode.FILE_PARSE_OR_PATH_ERROR);
-        }
-
+        validateHeaders(fields.length);
         try {
-            Promotion promotion = findAvailablePromotion(fields, currentPromotions);
-            return convert(fields, promotion);
+            Promotion promotion = findCurrentPromotion(fields, currentPromotions);
+            return toProduct(fields, promotion);
         } catch (NumberFormatException e) {
             throw new BusinessException(ErrorCode.FILE_PARSE_OR_PATH_ERROR);
         }
     }
 
-    private static Promotion findAvailablePromotion(final String[] fields, final CurrentPromotions currentPromotions) {
-        String promotionName = fields[3];
-        Promotion promotion = currentPromotions.findAvailablePromotionByName(promotionName);
+    private static Promotion findCurrentPromotion(final String[] fields, final CurrentPromotions currentPromotions) {
+        Promotion promotion = currentPromotions.findAvailablePromotionByName(fields[3]);
         return promotion;
     }
 
-    private static Product convert(final String[] fields, final Promotion promotion) {
+    private static Product toProduct(final String[] fields, final Promotion promotion) {
         String name = fields[0];
         int price = Integer.parseInt(fields[1]);
         int quantity = Integer.parseInt(fields[2]);
-
         validateQuantity(price, quantity);
         return Product.of(name, price, quantity, promotion, promotion.isValidPromotion(), true);
+    }
+
+    private static void validateHeaders(final int headerLength) {
+        if (headerLength != StoreConst.PRODUCT_COLUMN_SIZE) {
+            throw new BusinessException(ErrorCode.FILE_PARSE_OR_PATH_ERROR);
+        }
     }
 
     private static void validateQuantity(final int price, final int quantity) {

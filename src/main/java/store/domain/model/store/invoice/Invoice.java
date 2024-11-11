@@ -68,9 +68,7 @@ public class Invoice {
         if (userGiftQuantity == 0) return;
 
         Product promotionProduct = confirmedWishList.getPromotionProduct();
-        ProductInfo product = ProductInfo.of(promotionProduct, userGiftQuantity);
-
-        giftProducts.add(product);
+        giftProducts.add(ProductInfo.of(promotionProduct, userGiftQuantity));
     }
 
     private static int getGiftProductQuantity(final ConfirmedProduct confirmedWishList) {

@@ -35,8 +35,7 @@ public class ProductWriter {
 
     private static void writeProduct(final Product product, final BufferedWriter writer) {
         try {
-            // 프로모션 이름 가져오기
-            String line = makeRow(product);
+            String line = makeRow(product); // 프로모션 이름 가져오기
             writer.write(line);
             writer.newLine();
         } catch (IOException ignored) {
@@ -51,8 +50,7 @@ public class ProductWriter {
                 String.valueOf(product.getCurrentQuantity()), //물품 수량
                 getPromotionName(product)                     //프로모션 이름
         };
-        String line = String.join(StoreConst.COMMA, attributes);
-        return line;
+        return String.join(StoreConst.COMMA, attributes);
     }
 
     private static String getPromotionName(final Product product) {

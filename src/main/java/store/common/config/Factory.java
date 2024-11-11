@@ -21,7 +21,7 @@ public class Factory {
     private static CurrentProducts currentProducts;
 
     public ConvenienceStore storeController() {
-        return new ConvenienceStore(convenienceStore(), inputView(), outputView());
+        return new ConvenienceStore(storeManager(), inputView(), outputView());
     }
 
     public InputView inputView() {
@@ -32,8 +32,15 @@ public class Factory {
         return new OutputView();
     }
 
-    public StoreManager convenienceStore() {
+    public StoreManager storeManager() {
         return new StoreManager(currentProduct(), suggestionService(), stockService());
+    }
+
+    private CurrentProducts currentProduct() {
+        if (currentProducts == null) {
+            currentProducts = productParser().parseProducts(StoreConst.PRODUCTS_FILE_PATH, currentPromotions());
+        }
+        return currentProducts;
     }
 
     public SuggestionService suggestionService() {
@@ -44,13 +51,6 @@ public class Factory {
         return new StockService();
     }
 
-
-    private CurrentProducts currentProduct() {
-        if (currentProducts == null) {
-            currentProducts = productParser().parseProducts(StoreConst.PRODUCTS_FILE_PATH, currentPromotions());
-        }
-        return currentProducts;
-    }
 
     public CurrentPromotions currentPromotions() {
         return promotionParser().parsePromotions(StoreConst.PROMOTIONS_FILE_PATH);

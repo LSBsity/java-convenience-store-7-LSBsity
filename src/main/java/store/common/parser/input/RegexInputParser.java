@@ -32,15 +32,21 @@ public class RegexInputParser implements InputParser {
     private List<UserWish> parseWishListFromInput(final Matcher matcher, final CurrentProducts currentProducts) {
         List<UserWish> wishList = new ArrayList<>();
         Set<String> productNames = new HashSet<>();
-
+        
         while (matcher.find()) {
-            String userRequestProductName = matcher.group(1);
-            int userRequestProductQuantity = Integer.parseInt(matcher.group(2));
-
-            validate(currentProducts, productNames, userRequestProductName, userRequestProductQuantity);
-            wishList.add(UserWish.of(userRequestProductName, userRequestProductQuantity));
+            UserWish userWishProduct = extract(matcher, currentProducts, productNames);
+            wishList.add(userWishProduct);
         }
         return wishList;
+    }
+
+    private static UserWish extract(final Matcher matcher, final CurrentProducts currentProducts, final Set<String> productNames) {
+        String userRequestProductName = matcher.group(1);
+        int userRequestProductQuantity = Integer.parseInt(matcher.group(2));
+
+        validate(currentProducts, productNames, userRequestProductName, userRequestProductQuantity);
+
+        return UserWish.of(userRequestProductName, userRequestProductQuantity);
     }
 
     private static void validate(final CurrentProducts currentProducts, final Set<String> productNames, final String userRequestProductName, final int userRequestProductQuantity) {

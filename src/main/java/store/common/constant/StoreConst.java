@@ -20,13 +20,13 @@ public class StoreConst {
     public static final String YES = "Y";
     public static final String YES_OR_NO = "(Y/N)\n";
     public static final String ASK_MEMBERSHIP_SALE_MSG = "멤버십 할인을 받으시겠습니까? (Y/N)";
+    public static final String EMPTY_MSG = "";
 
     public static final String WISH_LIST_INPUT_REGEX = "\\[(.+?)-\\d+]((,\\[(.+?)-\\d+])*)";
     public static final String WISH_LIST_INPUT_COMPILE_REGEX = "\\[(.*?)-(\\d+)]";
 
     public static final String PROMOTIONS_FILE_PATH = "src/main/resources/promotions.md";
     public static final String PRODUCTS_FILE_PATH = "src/main/resources/products.md";
-    public static final String PRODUCTS_TEST_FILE_PATH = "src/main/resources/products_test.md";
     public static final String PRODUCTS_FILE_HEADER = "name,price,quantity,promotion";
 
     public static final String PRODUCT_FORMAT = "- %s %,d원 %s %s";
@@ -50,7 +50,6 @@ public class StoreConst {
     public static final String ADDITIONAL_FREE_PRODUCT_MSG = "현재 %s은(는) %d개를 무료로 더 받을 수 있습니다. 추가하시겠습니까?";
     public static final String INSUFFICIENT_PROMOTION_STOCK_MSG = "현재 %s %d개는 프로모션 할인이 적용되지 않습니다. 그래도 구매하시겠습니까?";
     public static final String EXCESSIVE_ADDITIONAL_PURCHASE_MSG = "현재 %s %d개는 프로모션 할인이 적용되지 않습니다. 그래도 구매하시겠습니까?";
-    public static final String EMPTY_MSG = "";
     public static final String FILE_WRITE_ERROR_MSG = "파일을 쓰는 중 에러가 발생했습니다.";
     public static final String FILE_CONTAINS_NEGATIVE_NUMBERS_MSG = "파일 안에 있는 물건의 개수나 금액에 음수가 포함되어 있습니다.";
 }

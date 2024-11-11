@@ -1,4 +1,4 @@
-package store.domain.model.store.stock;
+package store.domain.model.store.service.stock;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

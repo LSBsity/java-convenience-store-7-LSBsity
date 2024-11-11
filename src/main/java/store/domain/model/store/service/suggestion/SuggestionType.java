@@ -40,9 +40,7 @@ public enum SuggestionType {
         @Override
         public void updateStock(final ConfirmedProduct confirmedProduct) {
             StoreSuggestion storeSuggestion = confirmedProduct.getStoreSuggestion();
-            UserAnswer userAnswer = confirmedProduct.getUserAnswer();
-
-            if (userAnswer == UserAnswer.YES) {
+            if (confirmedProduct.getUserAnswer() == UserAnswer.YES) { //
                 decreaseInsufficientPromotionStockByUserAnswer(storeSuggestion);
                 return;
             }
@@ -67,13 +65,10 @@ public enum SuggestionType {
         @Override
         public void updateStock(final ConfirmedProduct confirmedProduct) {
             StoreSuggestion storeSuggestion = confirmedProduct.getStoreSuggestion();
-            UserAnswer userAnswer = confirmedProduct.getUserAnswer();
-
-            if (userAnswer == UserAnswer.NO) {
+            if (confirmedProduct.getUserAnswer() == UserAnswer.NO) {
                 storeSuggestion.decreasePromotionStock(storeSuggestion.getUserRequestSize());
                 return;
             }
-
             storeSuggestion.decreasePromotionStock(storeSuggestion.getUserRequestSize() - 1);
             storeSuggestion.decreaseNormalStock(1);
         }
@@ -147,8 +142,7 @@ public enum SuggestionType {
         return shouldPrint;
     }
 
-
-    // enum overide method에서 추출한 메서드들
+    // enum overide method에서 추출한 메서드
     private static void decreaseInsufficientPromotionStockByUserAnswer(final StoreSuggestion storeSuggestion) {
         int promotionStock = storeSuggestion.getPromotionAvailableStockQuantity();
         int userRequestSize = storeSuggestion.getUserRequestSize();
@@ -168,6 +162,4 @@ public enum SuggestionType {
         int avail = promotionAvailableStockQuantity / defaultQuantity * defaultQuantity;
         return avail;
     }
-
-
 }

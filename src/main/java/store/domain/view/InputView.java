@@ -58,12 +58,9 @@ public class InputView {
     }
 
     private static UserAnswer validateUserAnswerInput(final String input) {
-        if (input.equals(StoreConst.YES)) {
-            return UserAnswer.YES;
-        }
-        if (input.equals(StoreConst.NO)) {
-            return UserAnswer.NO;
-        }
+        if (input.equals(StoreConst.YES)) return UserAnswer.YES;
+
+        if (input.equals(StoreConst.NO)) return UserAnswer.NO;
 
         throw new BusinessException(ErrorCode.USER_CONFIRM_INPUT_ERROR);
     }

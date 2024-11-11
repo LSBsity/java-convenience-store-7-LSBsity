@@ -28,20 +28,19 @@ public class ConvenienceStore {
 
     public void run() {
         do {
-            List<UserWish> userWishList = getUserWishList(storeManager.getCurrentProducts());
-
-            List<ConfirmedProduct> userConfirmedWishList = suggestAndHandle(userWishList);
-
-            UserAnswer isMemberShip = inputView.askMembershipSale();
-
-            Invoice invoice = storeManager.issueInvoice(userConfirmedWishList, isMemberShip);
-
+            List<UserWish> userWishList = this.getUserWishList(storeManager.getCurrentProducts());
+            List<ConfirmedProduct> userConfirmedWishList = this.suggestAndHandle(userWishList);
+            Invoice invoice = this.getInvoiceByUserAnswer(userConfirmedWishList);
             storeManager.updateStock(userConfirmedWishList);
-
             outputView.showInvoice(invoice);
         } while (storeManager.hasAvailableStock() && inputView.tryAgain() == UserAnswer.YES);
-
         writeProductFile(storeManager.getCurrentProducts());
+    }
+
+    private Invoice getInvoiceByUserAnswer(final List<ConfirmedProduct> userConfirmedWishList) {
+        UserAnswer isMemberShip = inputView.askMembershipSale();
+        Invoice invoice = storeManager.issueInvoice(userConfirmedWishList, isMemberShip);
+        return invoice;
     }
 
     private List<UserWish> getUserWishList(final CurrentProducts currentProducts) {
